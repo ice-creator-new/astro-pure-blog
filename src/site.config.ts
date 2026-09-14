@@ -3,9 +3,9 @@ import type { CardListData, FooterConfig, IntegrationConfig, MenuLinks, SiteConf
 export const siteConfig: SiteConfig = {
   // === Required meta properties ===
   // Used as both a meta property (src/components/BaseHead.astro L:31 + L:49) & the generated satori png (src/pages/og-image/[slug].png.ts)
-  author: 'Ice',
+  author: 'ice',
   // Meta property used to construct the meta title property, found in src/components/BaseHead.astro L:11
-  title: 'Ice 的博客',
+  title: 'ice 的博客',
   // Meta property used to generate your sitemap and canonical URLs in your final build
   site: 'https://astro-pure-blog.vercel.app',
   // Meta property used as the default description meta property
@@ -65,7 +65,7 @@ export const footerConfig: FooterConfig = {
     // },
     {
       name: 'github',
-      url: 'https://github.com/IceSniperring/astro-pure-blog'
+      url: 'https://github.com/ice-creator-new/astro-pure-blog'
     }
   ]
 }
@@ -131,18 +131,9 @@ export const menuLinks: MenuLinks = [
     link: '/blog',
     label: '文章'
   },
-  // Docs menu
-  {
-    link: '/docs/list',
-    label: '文档'
-  },
   {
     link: '/projects',
     label: '项目'
-  },
-  {
-    link: '/links',
-    label: '友链'
   },
   {
     link: '/about',

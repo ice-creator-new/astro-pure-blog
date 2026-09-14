@@ -1,26 +1,15 @@
 ---
-title: 你好，这是我的新博客
+title: 你好，这是我的博客
 publishDate: 2026-09-14 14:00:00
-description: '基于 Astro Theme Pure 搭建的中文博客，第一篇文章。'
+description: '欢迎来到 ice 的个人博客。'
 tags:
   - 随笔
-  - 建站
 language: '中文'
 draft: false
 ---
 
-欢迎来到 **Ice 的博客**。
+欢迎。
 
-这是用 [Astro Theme Pure](https://github.com/cworld1/astro-theme-pure) 搭起来的中文静态博客，部署在 Vercel 上。
+这里会记录一些项目笔记、想法和日常。站点基于 Astro Theme Pure，支持中英文切换。
 
-## 为什么选 Pure
-
-- 干净、轻量，阅读体验好
-- 原生支持中文排版与暗色模式
-- Markdown 写稿，Git 管理，部署简单
-
-## 接下来
-
-后面会陆续写项目笔记、想法和日常。若链接能打开，说明部署已经跑通。
-
-—— Ice
+—— ice

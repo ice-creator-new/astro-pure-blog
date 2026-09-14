@@ -4,7 +4,7 @@ export const locales: Locale[] = ['zh', 'en']
 
 export const messages: Record<Locale, Record<string, string>> = {
   zh: {
-    'site.title': 'Ice 的博客',
+    'site.title': 'ice 的博客',
     'site.description': '记录想法、项目与日常',
     'nav.blog': '文章',
     'nav.docs': '文档',
@@ -25,8 +25,8 @@ export const messages: Record<Locale, Record<string, string>> = {
     'home.getTemplate': '获取模板',
     'home.about': '关于',
     'home.about.role': '开发者 / 设计师',
-    'home.about.body':
-      '这里是 Ice 的个人博客。我会写项目笔记、产品想法，以及一些日常随笔。',
+    'home.about.body': '我是 ice。这里会写项目笔记和一些想法。',
+    'home.github': 'GitHub',
     'home.about.more': '了解更多',
     'home.posts': '最新文章',
     'home.posts.more': '更多文章',
@@ -50,7 +50,7 @@ export const messages: Record<Locale, Record<string, string>> = {
     'footer.terms': '条款',
   },
   en: {
-    'site.title': "Ice's Blog",
+    'site.title': "ice's Blog",
     'site.description': 'Notes on ideas, projects, and daily life',
     'nav.blog': 'Blog',
     'nav.docs': 'Docs',
@@ -71,8 +71,8 @@ export const messages: Record<Locale, Record<string, string>> = {
     'home.getTemplate': 'Get Template',
     'home.about': 'About',
     'home.about.role': 'Developer / Designer',
-    'home.about.body':
-      "This is Ice's personal blog — project notes, product thoughts, and occasional essays.",
+    'home.about.body': 'I am ice. Project notes and occasional thoughts live here.',
+    'home.github': 'GitHub',
     'home.about.more': 'More about me',
     'home.posts': 'Posts',
     'home.posts.more': 'More posts',
