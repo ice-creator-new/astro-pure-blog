@@ -18,7 +18,9 @@ const { class: className } = Astro.props
           required
           name='search'
           id='search'
-          placeholder='Enter a search term…'
+          placeholder='输入搜索词…'
+          data-i18n='search.placeholder'
+          data-i18n-attr='placeholder'
           class='w-full rounded-xl border bg-transparent py-2 pe-3 ps-10 outline-none focus:border-foreground sm:py-3 sm:ps-12'
         />
       </div>
@@ -109,10 +111,15 @@ const { class: className } = Astro.props
       const loc = document.documentElement.dataset.locale || 'zh'
         const tpl = (window.__iceMessages && window.__iceMessages[loc] && window.__iceMessages[loc]['search.resultsFor']) || (loc === 'en' ? 'Search results for “{q}”' : '“{q}” 的搜索结果')
         this.searchReadout.textContent = search ? tpl.replace('{q}', search) : ''
+      const emptyTpl =
+        (window.__iceMessages &&
+          window.__iceMessages[loc] &&
+          window.__iceMessages[loc]['search.noResults']) ||
+        (loc === 'en' ? 'No results found…' : '没有找到结果…')
       this.resultsList.innerHTML =
         searchResult.length > 0
           ? this.generateSearchList(searchResult)
-          : '<p class="text-center py-12">No results found…</p>'
+          : `<p class="text-center py-12">${emptyTpl}</p>`
     }
 
     connectedCallback() {

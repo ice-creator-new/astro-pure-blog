@@ -20,12 +20,17 @@ const meta = {
     <Button title='返回' data-i18n='blog.back' href='/blog' style='back' />
     <h1 class='mb-6 mt-6 text-3xl font-medium sm:mt-10' data-i18n='search.title'>搜索</h1>
 
-    <p class='animate'>
-      Enter a search term or phrase to search the blog. If you cannot find what you want, try <a
+    <p class='animate' data-i18n='search.hint'>
+      输入关键词搜索博客。找不到想要的内容时，也可以试试 Google 站内搜索。
+    </p>
+    <p class='animate mt-2'>
+      <a
         class='underline'
         href='https://cse.google.com.hk/cse?cx=220579155cae140a0'
-        target='_blank'>Google Powered</a
-      > one.
+        target='_blank'
+        data-i18n='search.googleLink'
+        >Google 站内搜索</a
+      >
     </p>
     <Search posts={allPosts} class='animate' />
   </div>

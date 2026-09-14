@@ -12,7 +12,7 @@ language: "中 / EN"
 draft: false
 heroImage:
   src: ./hero.png
-  alt: "Abstract glowing AI orb in a cosmic dark scene"
+  alt: "Grok 官方产品图（x.ai）"
   color: "#659EB9"
 ---
 
@@ -20,13 +20,21 @@ heroImage:
 
 ## 先说清楚：两个名字，两层能力
 
+*封面来源：[x.ai/grok](https://x.ai/grok)*
+
 **Grok** 多半指对话模型本身——你在聊天框里问它，它用文字回答。气质偏直接、爱开玩笑，也敢接一些别的助手会绕开的问题。
 
 **Grok Bot** 则更像「住在你电脑里的助手」：不只回话，还能看屏幕、跑命令、改文件、连 GitHub / Vercel，把一件事从说到做串起来。
 
 一句话：**Grok 是脑力，Grok Bot 是手脚。**
 
-![桌面助手示意：聊天窗口浮在深色桌面上](./grok-bot.png)
+![xAI Designing Grok Bot：Bot 头像造型系统（来源：x.ai/news/designing-grok-bot）](./avatars.png)
+
+*图片来源：[Designing Grok Bot](https://x.ai/news/designing-grok-bot)*
+
+![xAI 官方：Grok Bot starter bots 设计示意（来源：x.ai/bot/guides）](./grok-bot.png)
+
+*图片来源：[xAI Grok Bot Guides](https://x.ai/bot/guides/designing-grok-bot-with-grok-bot)*
 
 ## Grok：适合聊清楚「是什么 / 为什么」
 
@@ -58,7 +66,9 @@ heroImage:
 - **壳子**（导航、按钮）走词条表  
 - **文章**准备中英两份正文，同一 URL，按当前语言显示
 
-![中英切换示意：两侧文案气泡与中间开关](./bilingual.png)
+![Grok 聊天界面截图（来源：Wikimedia Commons）](./bilingual.png)
+
+*图片来源：[Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Grok_chatbot_example_screenshot.webp)*
 
 这样读者点一次「EN / 中文」，标题、摘要和正文会一起变——这篇文章本身就是这样接的。
 
@@ -84,13 +94,21 @@ Grok 让你把话说清；Grok Bot 让你把事做完。两者叠在一起，才
 
 ## Two names, two layers
 
+*Cover image: [x.ai/grok](https://x.ai/grok)*
+
 **Grok** usually means the chat model: you ask, it answers in text—direct, sometimes irreverent, strong at explanation and ideation.
 
 **Grok Bot** is closer to a desktop teammate: it can look at a screen, run commands, edit files, talk to GitHub or Vercel, and carry a task from “idea” to “shipped.”
 
 In short: **Grok is the brain; Grok Bot is the hands.**
 
-![Illustration of a desktop assistant chat window on a dark desk](./grok-bot.png)
+![xAI Designing Grok Bot: avatar system (source: x.ai/news/designing-grok-bot)](./avatars.png)
+
+*Image credit: [Designing Grok Bot](https://x.ai/news/designing-grok-bot)*
+
+![Official xAI: Grok Bot starter bots design (source: x.ai/bot/guides)](./grok-bot.png)
+
+*Image credit: [xAI Grok Bot Guides](https://x.ai/bot/guides/designing-grok-bot-with-grok-bot)*
 
 ## Grok: great for “what” and “why”
 
@@ -122,7 +140,9 @@ A fuller setup:
 - **Chrome** (nav, buttons) uses a message table  
 - **Posts** ship zh + en bodies on the same URL, shown by the active locale  
 
-![Illustration of bilingual bubbles with a center toggle](./bilingual.png)
+![Grok chatbot UI screenshot (source: Wikimedia Commons)](./bilingual.png)
+
+*Image credit: [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Grok_chatbot_example_screenshot.webp)*
 
 One tap on **EN / 中文** should update title, blurb, and body together—this post is wired that way.
 
