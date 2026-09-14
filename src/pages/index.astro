@@ -1,14 +1,11 @@
 ---
 import PageLayout from '@/layouts/BaseLayout.astro'
-import { Image } from 'astro:assets'
-
 import { Quote } from '@/components/advanced'
 import PostPreview from '@/components/blog/PostPreview.astro'
 import Section from '@/components/home/Section.astro'
 import SkillLayout from '@/components/home/SkillLayout.astro'
 import { Button, Label } from '@/components/user'
 import { getAllCollections, sortMDByDate } from '@/utils'
-import avatar from '@/assets/avatar.png'
 import { siteConfig } from '@/site-config'
 
 const languages = ['Html', 'JavaScript', 'CSS', 'Shell']
@@ -23,11 +20,14 @@ const allPostsByDate = sortMDByDate(allPosts).slice(0, MAX_POSTS)
 <PageLayout meta={{ title: '首页' }} highlightColor='#659EB966'>
   <div class='flex w-full flex-col items-center'>
     <section class='animate mb-10 flex flex-col items-center gap-y-7' id='content-header'>
-      <Image
-        src={avatar}
+      <img
+        src='https://github.com/ice-creator-new.png'
         alt='profile'
-        class='h-28 w-auto rounded-full border p-1'
+        width='112'
+        height='112'
+        class='h-28 w-28 rounded-full border p-1 object-cover'
         loading='eager'
+        referrerpolicy='no-referrer'
       />
 
       <div class='flex flex-col items-center gap-y-4'>
