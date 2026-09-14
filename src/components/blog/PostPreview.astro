@@ -21,6 +21,12 @@ const {
 const postDate = data.updatedDate ?? data.publishDate
 
 const { remarkPluginFrontmatter } = await render()
+const minutes =
+  typeof remarkPluginFrontmatter.minutes === 'number'
+    ? remarkPluginFrontmatter.minutes
+    : Math.max(1, parseInt(String(remarkPluginFrontmatter.minutesRead || '1'), 10) || 1)
+const minutesZh = `${minutes} 分钟阅读`
+const minutesEn = `${minutes} min read`
 ---
 
 <li
@@ -103,7 +109,9 @@ const { remarkPluginFrontmatter } = await render()
                 <svg class='size-4'>
                   <use href='/icons/ui.svg#mingcute-time-line' />
                 </svg>
-                {remarkPluginFrontmatter.minutesRead}
+                <span data-i18n-zh={minutesZh} data-i18n-en={minutesEn}>
+                  {minutesZh}
+                </span>
               </span>
               {/* language */}
               {data.language && (

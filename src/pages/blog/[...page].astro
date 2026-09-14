@@ -31,20 +31,25 @@ interface Props {
 const { page, uniqueTags, totalPosts } = Astro.props
 
 const meta = {
-  description: 'Some posts or archieves of my blog',
-  title: 'Blog'
+  description: '我的博客文章与归档',
+  title: '文章'
 }
+
+const pageShowingZh = `第 ${page.currentPage} 页 · 显示 ${page.data.length} / ${totalPosts} 篇`
+const pageShowingEn = `Page ${page.currentPage} · Showing ${page.data.length} of ${totalPosts} posts`
 
 const paginationProps = {
   ...(page.url.prev && {
     prevUrl: {
-      text: `← Previous Posts`,
+      text: `← 上一页`,
+      textEn: `← Previous Posts`,
       url: page.url.prev
     }
   }),
   ...(page.url.next && {
     nextUrl: {
-      text: `Next Posts →`,
+      text: `下一页 →`,
+      textEn: `Next Posts →`,
       url: page.url.next
     }
   })
@@ -53,22 +58,32 @@ const paginationProps = {
 
 <PageLayout {meta}>
   <div class='w-full'>
-    <Button title='Back' href='/' style='back' />
-    <h1 class='mb-6 mt-6 text-3xl font-medium sm:mt-10'>Blog</h1>
+    <Button title='返回' data-i18n='common.back' href='/' style='back' />
+    <h1 class='mb-6 mt-6 text-3xl font-medium sm:mt-10' data-i18n='blog.title'>文章</h1>
 
     {
       page.data.length === 0 ? (
-        <p>No posts yet.</p>
+        <p data-i18n='blog.empty'>还没有文章。</p>
       ) : (
         <>
           <div class='grid gap-y-16 sm:grid-cols-[3fr_1fr] sm:gap-x-8'>
-            <section aria-label='Blog posts list'>
+            <section aria-label='文章列表' data-i18n-aria='blog.listAria'>
               <div class='animate mb-3 flex flex-col justify-between text-sm sm:mb-5 sm:flex-row'>
-                <span class='text-muted-foreground'>
-                  Page {page.currentPage} - Showing {page.data.length} of {totalPosts} posts
+                <span
+                  class='text-muted-foreground'
+                  data-i18n-zh={pageShowingZh}
+                  data-i18n-en={pageShowingEn}
+                >
+                  {pageShowingZh}
                 </span>
-                <a aria-label='View all blog by years' href='/archives' data-astro-prefetch>
-                  View all posts by years →
+                <a
+                  aria-label='按年份查看全部文章'
+                  data-i18n-aria='blog.archivesAria'
+                  href='/archives'
+                  data-astro-prefetch
+                  data-i18n='blog.archivesLink'
+                >
+                  按年份查看全部 →
                 </a>
               </div>
               <ul class='animate flex flex-col gap-y-4 text-start'>
@@ -84,7 +99,7 @@ const paginationProps = {
                   <svg class='me-2 size-6'>
                     <use href='/icons/ui.svg#mingcute-tag-2-line' />
                   </svg>
-                  Tags
+                  <span data-i18n='blog.tags'>标签</span>
                 </h2>
                 <ul class='text-bgColor flex flex-wrap gap-2'>
                   {uniqueTags.map((tag) => (
@@ -94,8 +109,14 @@ const paginationProps = {
                   ))}
                 </ul>
                 <span class='mt-4 block sm:text-end'>
-                  <a aria-label='View all blog categories' href='/tags' data-astro-prefetch>
-                    View all →
+                  <a
+                    aria-label='查看全部标签'
+                    data-i18n-aria='blog.viewAllTagsAria'
+                    href='/tags'
+                    data-astro-prefetch
+                    data-i18n='blog.viewAllTags'
+                  >
+                    查看全部 →
                   </a>
                 </span>
               </aside>

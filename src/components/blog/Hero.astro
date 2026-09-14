@@ -14,6 +14,12 @@ const {
 } = Astro.props
 
 const { remarkPluginFrontmatter } = await render()
+const minutes =
+  typeof remarkPluginFrontmatter.minutes === 'number'
+    ? remarkPluginFrontmatter.minutes
+    : Math.max(1, parseInt(String(remarkPluginFrontmatter.minutesRead || '1'), 10) || 1)
+const minutesZh = `${minutes} 分钟阅读`
+const minutesEn = `${minutes} min read`
 
 const dateTimeOptions: Intl.DateTimeFormatOptions = {
   month: 'short'
@@ -59,7 +65,7 @@ const dateTimeOptions: Intl.DateTimeFormatOptions = {
           <div class='flex items-center gap-1'>
             <span> / </span>
             <span>
-              Update
+              <span data-i18n='blog.updated'>更新于</span>{' '}
               <FormattedDate
                 class='font-sans'
                 date={data.updatedDate}
@@ -75,7 +81,7 @@ const dateTimeOptions: Intl.DateTimeFormatOptions = {
       <svg class='size-5'>
         <use href='/icons/ui.svg#mingcute-time-line'></use>
       </svg>
-      {remarkPluginFrontmatter.minutesRead}
+      <span data-i18n-zh={minutesZh} data-i18n-en={minutesEn}>{minutesZh}</span>
     </div>
     {
       // Language

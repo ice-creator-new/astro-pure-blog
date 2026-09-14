@@ -18,10 +18,12 @@ export const remarkReadingTime: Plugin<[], Root> = function () {
   return function (tree, { data }) {
     const textOnPage = toString(tree)
     const readingTime = getReadingTime(textOnPage)
-    // readingTime.text will give us minutes read as a friendly string,
-    // i.e. "3 min read"
-    const astroData = data as { astro: { frontmatter: { minutesRead: string } } }
-    astroData.astro.frontmatter.minutesRead = readingTime.text
+    const minutes = Math.max(1, Math.ceil(readingTime.minutes))
+    const astroData = data as {
+      astro: { frontmatter: { minutesRead: string; minutes: number } }
+    }
+    astroData.astro.frontmatter.minutes = minutes
+    astroData.astro.frontmatter.minutesRead = `${minutes} min read`
   }
 }
 

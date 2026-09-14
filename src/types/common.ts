@@ -3,6 +3,7 @@ export type MenuLinks = { link: string; label: string }[]
 export interface PaginationLink {
   url: string
   text?: string
+  textEn?: string
   srLabel?: string
 }
 
