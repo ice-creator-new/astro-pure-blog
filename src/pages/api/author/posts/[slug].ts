@@ -62,8 +62,10 @@ export const PUT: APIRoute = async ({ request, params }) => {
     }
     if (meta.description.length < 10) meta.description = meta.description + '………'
     const md = buildMarkdown(meta, String(body.body || ''))
-    await putFile(path, md, `author: update post ${slug}`, existing.sha)
-    return new Response(JSON.stringify({ ok: true, slug }), {
+    const put = await putFile(path, md, `author: update post ${slug}`, existing.sha)
+    const commitSha = put?.commit?.sha
+    const commitUrl = put?.commit?.html_url
+    return new Response(JSON.stringify({ ok: true, slug, commitSha, commitUrl }), {
       headers: { 'Content-Type': 'application/json' }
     })
   } catch (e) {

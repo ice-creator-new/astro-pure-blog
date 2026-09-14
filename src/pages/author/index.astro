@@ -5,165 +5,383 @@ export const prerender = false
 ---
 
 <PageLayout meta={{ title: '作者后台', description: '博客作者管理', robots: 'noindex, nofollow' }}>
-  <div class='mx-auto w-full max-w-3xl px-4 py-10' id='author-app'>
-    <section id='view-login' class='animate flex flex-col items-center gap-6'>
-      <div class='w-full max-w-sm rounded-2xl border border-border bg-muted/40 p-6 shadow-sm'>
-        <h1 class='mb-1 text-2xl font-bold'>作者后台</h1>
-        <p class='mb-6 text-sm text-muted-foreground'>
-          输入作者密码以管理文章。保存后会写入 GitHub 并触发重新部署。
-        </p>
-        <form id='login-form' class='flex flex-col gap-3'>
-          <label class='text-sm font-medium' for='password'>密码</label>
+  <div id="author-app" class="author-app mx-auto w-full max-w-6xl px-3 pb-16 pt-4 sm:px-4">
+    <!-- Login -->
+    <section id="view-login" class="flex min-h-[70vh] flex-col items-center justify-center">
+      <div class="auth-card w-full max-w-md">
+        <div class="mb-6 flex items-center gap-3">
+          <div class="auth-mark" aria-hidden="true">✎</div>
+          <div>
+            <h1 class="text-2xl font-bold tracking-tight">作者后台</h1>
+            <p class="text-sm text-muted-foreground">管理文章 · 保存即写入 GitHub</p>
+          </div>
+        </div>
+        <form id="login-form" class="flex flex-col gap-3">
+          <label class="text-sm font-medium" for="password">密码</label>
           <input
-            id='password'
-            name='password'
-            type='password'
-            autocomplete='current-password'
-            class='rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none focus:border-foreground/40'
+            id="password"
+            name="password"
+            type="password"
+            autocomplete="current-password"
+            class="field"
+            placeholder="输入作者密码"
             required
           />
-          <p id='login-error' class='hidden text-sm text-red-500'></p>
-          <button
-            type='submit'
-            class='mt-2 rounded-lg border border-border bg-background px-3 py-2 text-sm font-medium transition hover:bg-primary-foreground'
-          >
-            进入
-          </button>
+          <p id="login-error" class="hidden text-sm text-red-500"></p>
+          <button type="submit" class="btn btn-primary mt-1 w-full">进入后台</button>
         </form>
+        <p class="mt-5 text-xs leading-relaxed text-muted-foreground">
+          此页不出现在导航中，且已 noindex。文章列表来自仓库
+          <code class="text-[0.7rem]">src/content/post</code>。
+        </p>
       </div>
     </section>
 
-    <section id='view-dash' class='hidden animate flex-col gap-8'>
-      <header class='flex flex-wrap items-center justify-between gap-3'>
+    <!-- Dashboard -->
+    <section id="view-dash" class="hidden">
+      <header class="mb-5 flex flex-wrap items-end justify-between gap-3 border-b border-border pb-4">
         <div>
-          <h1 class='text-2xl font-bold'>文章管理</h1>
-          <p class='text-sm text-muted-foreground' id='github-hint'>加载中…</p>
+          <p class="text-xs font-medium uppercase tracking-wider text-muted-foreground">Author Studio</p>
+          <h1 class="text-2xl font-bold tracking-tight sm:text-3xl">文章工作台</h1>
+          <p id="github-hint" class="mt-1 text-sm text-muted-foreground">加载中…</p>
         </div>
-        <div class='flex gap-2'>
-          <button
-            id='btn-new'
-            type='button'
-            class='rounded-lg border border-border bg-background px-3 py-1.5 text-sm transition hover:bg-primary-foreground'
-          >
-            新建文章
-          </button>
-          <button
-            id='btn-logout'
-            type='button'
-            class='rounded-lg border border-border px-3 py-1.5 text-sm text-muted-foreground transition hover:bg-muted'
-          >
-            退出
-          </button>
+        <div class="flex flex-wrap items-center gap-2">
+          <button id="btn-refresh" type="button" class="btn btn-ghost" title="刷新列表">刷新</button>
+          <button id="btn-new" type="button" class="btn btn-primary">新建文章</button>
+          <button id="btn-logout" type="button" class="btn btn-ghost">退出</button>
         </div>
       </header>
 
-      <div id='status' class='hidden rounded-lg border border-border bg-muted/50 px-3 py-2 text-sm'></div>
-      <ul id='post-list' class='flex flex-col gap-2'></ul>
+      <div class="workspace grid gap-4 lg:grid-cols-[minmax(260px,320px)_1fr]">
+        <!-- Sidebar list -->
+        <aside class="panel flex max-h-[calc(100vh-10rem)] flex-col overflow-hidden lg:sticky lg:top-24">
+          <div class="flex flex-col gap-2 border-b border-border p-3">
+            <input id="q" class="field" type="search" placeholder="搜索标题 / slug / 标签…" />
+            <div class="flex gap-1 rounded-lg bg-muted/60 p-1 text-xs">
+              <button type="button" data-filter="all" class="filter-chip is-active">全部</button>
+              <button type="button" data-filter="published" class="filter-chip">已发布</button>
+              <button type="button" data-filter="draft" class="filter-chip">草稿</button>
+            </div>
+            <p id="list-meta" class="text-xs text-muted-foreground">—</p>
+          </div>
+          <ul id="post-list" class="flex-1 space-y-1 overflow-y-auto p-2"></ul>
+        </aside>
 
-      <div id='editor' class='hidden rounded-2xl border border-border bg-muted/30 p-5'>
-        <div class='mb-4 flex items-center justify-between'>
-          <h2 class='text-lg font-semibold' id='editor-title'>编辑</h2>
-          <button id='btn-cancel' type='button' class='text-sm text-muted-foreground hover:text-foreground'>
-            关闭
-          </button>
+        <!-- Editor / empty -->
+        <div class="min-w-0">
+          <div id="editor-empty" class="panel empty-state flex min-h-[28rem] flex-col items-center justify-center gap-3 p-8 text-center">
+            <div class="auth-mark text-2xl opacity-60" aria-hidden="true">✎</div>
+            <h2 class="text-lg font-semibold">选择或新建一篇文章</h2>
+            <p class="max-w-sm text-sm text-muted-foreground">
+              左侧点选编辑；或点「新建文章」。保存会提交到 GitHub，Vercel 自动重建后前台更新。
+            </p>
+            <button type="button" id="btn-new-empty" class="btn btn-primary mt-2">新建文章</button>
+          </div>
+
+          <div id="editor" class="panel hidden overflow-hidden">
+            <div class="editor-top flex flex-wrap items-center justify-between gap-2 border-b border-border px-4 py-3">
+              <div class="min-w-0">
+                <h2 id="editor-title" class="truncate text-lg font-semibold">编辑</h2>
+                <p id="editor-sub" class="truncate text-xs text-muted-foreground"></p>
+              </div>
+              <div class="flex flex-wrap gap-2">
+                <a id="btn-preview" href="#" target="_blank" rel="noopener" class="btn btn-ghost">查看线上</a>
+                <button id="btn-cancel" type="button" class="btn btn-ghost">关闭</button>
+                <button id="btn-save" type="button" class="btn btn-primary">保存到 GitHub</button>
+              </div>
+            </div>
+
+            <form id="editor-form" class="flex flex-col gap-0">
+              <input type="hidden" id="edit-mode" value="create" />
+
+              <div class="grid gap-3 border-b border-border p-4 sm:grid-cols-2">
+                <div class="field-wrap sm:col-span-2">
+                  <div class="flex items-center justify-between">
+                    <label for="f-title">中文标题</label>
+                    <span id="c-title" class="count">0/60</span>
+                  </div>
+                  <input id="f-title" class="field" required maxlength="60" placeholder="文章标题" />
+                </div>
+                <div class="field-wrap sm:col-span-2">
+                  <div class="flex items-center justify-between">
+                    <label for="f-titleEn">英文标题</label>
+                    <span id="c-titleEn" class="count">0/80</span>
+                  </div>
+                  <input id="f-titleEn" class="field" maxlength="80" placeholder="Optional English title" />
+                </div>
+                <div class="field-wrap">
+                  <label for="f-slug">Slug（URL）</label>
+                  <input id="f-slug" class="field font-mono text-xs" placeholder="my-post" />
+                  <p class="hint">新建时可从标题自动生成；保存后不可改。</p>
+                </div>
+                <div class="field-wrap">
+                  <label for="f-date">发布日期</label>
+                  <input id="f-date" class="field font-mono text-xs" placeholder="2026-09-14 20:00:00" />
+                </div>
+                <div class="field-wrap sm:col-span-2">
+                  <div class="flex items-center justify-between">
+                    <label for="f-desc">中文摘要（≥10 字）</label>
+                    <span id="c-desc" class="count">0/180</span>
+                  </div>
+                  <textarea id="f-desc" class="field min-h-[64px]" required maxlength="180" placeholder="列表与 SEO 用的短摘要"></textarea>
+                </div>
+                <div class="field-wrap sm:col-span-2">
+                  <div class="flex items-center justify-between">
+                    <label for="f-descEn">英文摘要</label>
+                    <span id="c-descEn" class="count">0/180</span>
+                  </div>
+                  <textarea id="f-descEn" class="field min-h-[64px]" maxlength="180" placeholder="Optional English summary"></textarea>
+                </div>
+                <div class="field-wrap">
+                  <label for="f-tags">标签（逗号分隔）</label>
+                  <input id="f-tags" class="field" placeholder="AI, 设计, 评测" />
+                </div>
+                <div class="field-wrap">
+                  <label for="f-lang">语言标记</label>
+                  <input id="f-lang" class="field" value="中 / EN" />
+                </div>
+                <label class="flex items-center gap-2 text-sm text-muted-foreground sm:col-span-2">
+                  <input id="f-draft" type="checkbox" class="size-4 rounded border-border" />
+                  标记为草稿（draft，前台列表通常不展示）
+                </label>
+              </div>
+
+              <div class="border-b border-border px-4 py-2">
+                <div class="toolbar flex flex-wrap items-center gap-1">
+                  <button type="button" class="tool" data-md="h2" title="二级标题">H2</button>
+                  <button type="button" class="tool" data-md="bold" title="加粗">B</button>
+                  <button type="button" class="tool" data-md="italic" title="斜体">I</button>
+                  <button type="button" class="tool" data-md="link" title="链接">链接</button>
+                  <button type="button" class="tool" data-md="code" title="行内代码">代码</button>
+                  <button type="button" class="tool" data-md="quote" title="引用">引用</button>
+                  <span class="mx-1 h-4 w-px bg-border"></span>
+                  <button type="button" class="tool" data-md="bilingual" title="插入中英双语块">双语块</button>
+                  <button type="button" class="tool" data-md="img" title="插入图片路径">图片</button>
+                  <span class="ml-auto text-xs text-muted-foreground" id="body-meta">0 字</span>
+                </div>
+              </div>
+
+              <div class="p-4">
+                <div class="mb-2 flex items-center justify-between">
+                  <label for="f-body" class="text-xs font-medium text-muted-foreground">正文 Markdown</label>
+                  <span class="text-xs text-muted-foreground">⌘/Ctrl + S 保存 · 本地自动备份</span>
+                </div>
+                <textarea
+                  id="f-body"
+                  class="field body-area min-h-[420px] font-mono text-[12.5px] leading-relaxed"
+                  spellcheck="false"
+                  placeholder="写正文…"></textarea>
+                <p class="mt-3 text-xs leading-relaxed text-muted-foreground">
+                  配图请用仓库内路径（如
+                  <code class="text-[0.7rem]">../../assets/hero.png</code>
+                  ）；本页暂不上传二进制。保存后 Git 提交会触发 Vercel 自动部署，通常 1–3 分钟上线。
+                </p>
+              </div>
+            </form>
+          </div>
         </div>
-        <form id='editor-form' class='flex flex-col gap-3'>
-          <input type='hidden' id='edit-mode' value='create' />
-          <div class='grid gap-3 sm:grid-cols-2'>
-            <div class='flex flex-col gap-1'>
-              <label class='text-xs text-muted-foreground' for='f-slug'>Slug（URL）</label>
-              <input id='f-slug' class='field' placeholder='my-post' />
-            </div>
-            <div class='flex flex-col gap-1'>
-              <label class='text-xs text-muted-foreground' for='f-date'>发布日期</label>
-              <input id='f-date' class='field' placeholder='2026-09-14 20:00:00' />
-            </div>
-          </div>
-          <div class='flex flex-col gap-1'>
-            <label class='text-xs text-muted-foreground' for='f-title'>标题</label>
-            <input id='f-title' class='field' required maxlength='60' />
-          </div>
-          <div class='flex flex-col gap-1'>
-            <label class='text-xs text-muted-foreground' for='f-titleEn'>英文标题（可选）</label>
-            <input id='f-titleEn' class='field' maxlength='80' />
-          </div>
-          <div class='flex flex-col gap-1'>
-            <label class='text-xs text-muted-foreground' for='f-desc'>摘要（≥10 字）</label>
-            <input id='f-desc' class='field' required maxlength='180' />
-          </div>
-          <div class='flex flex-col gap-1'>
-            <label class='text-xs text-muted-foreground' for='f-descEn'>英文摘要（可选）</label>
-            <input id='f-descEn' class='field' maxlength='180' />
-          </div>
-          <div class='grid gap-3 sm:grid-cols-2'>
-            <div class='flex flex-col gap-1'>
-              <label class='text-xs text-muted-foreground' for='f-tags'>标签（逗号分隔）</label>
-              <input id='f-tags' class='field' placeholder='AI, 评测' />
-            </div>
-            <div class='flex flex-col gap-1'>
-              <label class='text-xs text-muted-foreground' for='f-lang'>语言标记</label>
-              <input id='f-lang' class='field' value='中 / EN' />
-            </div>
-          </div>
-          <label class='flex items-center gap-2 text-sm text-muted-foreground'>
-            <input id='f-draft' type='checkbox' class='rounded border-border' />
-            草稿（draft）
-          </label>
-          <div class='flex flex-col gap-1'>
-            <label class='text-xs text-muted-foreground' for='f-body'>正文（Markdown）</label>
-            <textarea
-              id='f-body'
-              class='field min-h-[280px] font-mono text-xs leading-relaxed'
-              spellcheck='false'></textarea>
-          </div>
-          <div class='mt-2 flex flex-wrap gap-2'>
-            <button
-              type='submit'
-              class='rounded-lg border border-border bg-background px-4 py-2 text-sm font-medium hover:bg-primary-foreground'
-            >
-              保存到 GitHub
-            </button>
-            <a
-              id='btn-preview'
-              href='#'
-              target='_blank'
-              rel='noopener'
-              class='rounded-lg border border-border px-4 py-2 text-sm text-muted-foreground hover:bg-muted'
-            >
-              查看线上
-            </a>
-          </div>
-          <p class='text-xs text-muted-foreground'>
-            保存会提交到仓库并通常触发 Vercel 重建（约 1–3 分钟）。配图请用仓库内路径；本页暂不上传二进制。
-          </p>
-        </form>
       </div>
     </section>
+
+    <div id="toast" class="toast hidden" role="status" aria-live="polite"></div>
   </div>
 </PageLayout>
 
 <style>
-  #author-app .field {
-    border-radius: 0.5rem;
-    border: 1px solid hsl(var(--border));
-    background: hsl(var(--background));
-    padding: 0.5rem 0.75rem;
-    font-size: 0.875rem;
-    outline: none;
-  }
-  #author-app .field:focus {
-    border-color: hsl(var(--foreground) / 0.4);
-  }
-  #post-list li {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: space-between;
-    gap: 0.75rem;
-    border-radius: 0.75rem;
+  .author-app .auth-card,
+  .author-app .panel {
+    border-radius: 1rem;
     border: 1px solid hsl(var(--border));
     background: hsl(var(--muted) / 0.35);
-    padding: 0.75rem 1rem;
+    box-shadow: 0 1px 0 hsl(var(--foreground) / 0.03);
+  }
+  .author-app .auth-card {
+    padding: 1.5rem;
+    background: linear-gradient(
+      160deg,
+      hsl(var(--muted) / 0.55),
+      hsl(var(--background) / 0.9)
+    );
+  }
+  .author-app .auth-mark {
+    display: grid;
+    place-items: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    border-radius: 0.9rem;
+    border: 1px solid hsl(var(--border));
+    background: hsl(var(--background));
+    font-size: 1.15rem;
+  }
+  .author-app .field {
+    width: 100%;
+    border-radius: 0.65rem;
+    border: 1px solid hsl(var(--border));
+    background: hsl(var(--background));
+    padding: 0.55rem 0.75rem;
+    font-size: 0.875rem;
+    outline: none;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  }
+  .author-app .field:focus {
+    border-color: hsl(var(--foreground) / 0.35);
+    box-shadow: 0 0 0 3px hsl(var(--foreground) / 0.06);
+  }
+  .author-app .field-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+  }
+  .author-app .field-wrap label {
+    font-size: 0.75rem;
+    color: hsl(var(--muted-foreground));
+  }
+  .author-app .hint {
+    font-size: 0.7rem;
+    color: hsl(var(--muted-foreground));
+  }
+  .author-app .count {
+    font-size: 0.7rem;
+    color: hsl(var(--muted-foreground));
+    font-variant-numeric: tabular-nums;
+  }
+  .author-app .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.35rem;
+    border-radius: 0.65rem;
+    border: 1px solid hsl(var(--border));
+    padding: 0.45rem 0.85rem;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+    background: hsl(var(--background));
+  }
+  .author-app .btn:hover {
+    background: hsl(var(--primary-foreground));
+  }
+  .author-app .btn:disabled {
+    opacity: 0.55;
+    pointer-events: none;
+  }
+  .author-app .btn-primary {
+    background: hsl(var(--foreground));
+    color: hsl(var(--background));
+    border-color: transparent;
+  }
+  .author-app .btn-primary:hover {
+    opacity: 0.9;
+    background: hsl(var(--foreground));
+  }
+  .author-app .btn-ghost {
+    background: transparent;
+    color: hsl(var(--muted-foreground));
+  }
+  .author-app .btn-ghost:hover {
+    background: hsl(var(--muted));
+    color: hsl(var(--foreground));
+  }
+  .author-app .btn-danger {
+    color: #ef4444;
+  }
+  .author-app .filter-chip {
+    flex: 1;
+    border-radius: 0.45rem;
+    padding: 0.35rem 0.5rem;
+    color: hsl(var(--muted-foreground));
+  }
+  .author-app .filter-chip.is-active {
+    background: hsl(var(--background));
+    color: hsl(var(--foreground));
+    font-weight: 600;
+    box-shadow: 0 1px 2px hsl(var(--foreground) / 0.06);
+  }
+  .author-app .post-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    width: 100%;
+    text-align: left;
+    border-radius: 0.75rem;
+    border: 1px solid transparent;
+    padding: 0.7rem 0.75rem;
+    transition: background 0.12s ease, border-color 0.12s ease;
+  }
+  .author-app .post-item:hover {
+    background: hsl(var(--background) / 0.7);
+  }
+  .author-app .post-item.is-active {
+    border-color: hsl(var(--border));
+    background: hsl(var(--background));
+    box-shadow: 0 1px 2px hsl(var(--foreground) / 0.04);
+  }
+  .author-app .badge {
+    display: inline-flex;
+    align-items: center;
+    border-radius: 999px;
+    padding: 0.1rem 0.45rem;
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+  }
+  .author-app .badge-draft {
+    background: hsl(41 90% 50% / 0.15);
+    color: hsl(41 90% 35%);
+  }
+  :global(.dark) .author-app .badge-draft {
+    color: hsl(41 90% 65%);
+  }
+  .author-app .badge-live {
+    background: hsl(142 60% 45% / 0.12);
+    color: hsl(142 60% 32%);
+  }
+  :global(.dark) .author-app .badge-live {
+    color: hsl(142 50% 65%);
+  }
+  .author-app .toolbar .tool {
+    border-radius: 0.45rem;
+    border: 1px solid hsl(var(--border));
+    background: hsl(var(--background));
+    padding: 0.25rem 0.5rem;
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: hsl(var(--muted-foreground));
+  }
+  .author-app .toolbar .tool:hover {
+    color: hsl(var(--foreground));
+    background: hsl(var(--muted));
+  }
+  .author-app .body-area {
+    resize: vertical;
+    line-height: 1.55;
+  }
+  .author-app .toast {
+    position: fixed;
+    right: 1rem;
+    bottom: 1rem;
+    z-index: 50;
+    max-width: min(24rem, calc(100vw - 2rem));
+    border-radius: 0.85rem;
+    border: 1px solid hsl(var(--border));
+    background: hsl(var(--background));
+    padding: 0.85rem 1rem;
+    font-size: 0.8125rem;
+    box-shadow: 0 10px 30px hsl(var(--foreground) / 0.12);
+  }
+  .author-app .toast.is-error {
+    border-color: #ef444455;
+  }
+  .author-app .toast a {
+    color: hsl(var(--primary));
+    text-decoration: underline;
+  }
+  .author-app .empty-state {
+    background: linear-gradient(
+      165deg,
+      hsl(var(--muted) / 0.4),
+      hsl(var(--background) / 0.85)
+    );
   }
 </style>
 
@@ -171,42 +389,25 @@ export const prerender = false
   const $ = (id) => document.getElementById(id)
   const loginView = $('view-login')
   const dashView = $('view-dash')
-  const statusEl = $('status')
   const listEl = $('post-list')
   const editor = $('editor')
+  const editorEmpty = $('editor-empty')
+  const toastEl = $('toast')
+  const DRAFT_KEY = 'ice-author-local-draft-v1'
 
-  function showStatus(msg, isError) {
-    statusEl.textContent = msg
-    statusEl.classList.remove('hidden')
-    statusEl.style.color = isError ? '#ef4444' : ''
-  }
-  function hideStatus() {
-    statusEl.classList.add('hidden')
-  }
+  let postsCache = []
+  let filterMode = 'all'
+  let activeSlug = null
+  let dirty = false
+  let toastTimer = null
+  let slugTouched = false
 
-  async function api(url, opts = {}) {
-    const res = await fetch(url, {
-      credentials: 'same-origin',
-      headers: { 'Content-Type': 'application/json', ...(opts.headers || {}) },
-      ...opts
-    })
-    let data = null
-    try {
-      data = await res.json()
-    } catch (_) {}
-    if (!res.ok) throw new Error((data && data.error) || res.statusText)
-    return data
-  }
-
-  function showLogin() {
-    loginView.classList.remove('hidden')
-    dashView.classList.add('hidden')
-    dashView.classList.remove('flex')
-  }
-  function showDash() {
-    loginView.classList.add('hidden')
-    dashView.classList.remove('hidden')
-    dashView.classList.add('flex')
+  function toast(msg, isError) {
+    toastEl.innerHTML = msg
+    toastEl.classList.remove('hidden')
+    toastEl.classList.toggle('is-error', Boolean(isError))
+    clearTimeout(toastTimer)
+    toastTimer = setTimeout(() => toastEl.classList.add('hidden'), 5200)
   }
 
   function escapeHtml(s) {
@@ -217,39 +418,215 @@ export const prerender = false
       .replace(/"/g, '&quot;')
   }
 
-  async function loadPosts() {
-    hideStatus()
-    const data = await api('/api/author/posts')
+  function nl() {
+    return String.fromCharCode(10)
+  }
+
+  function defaultBody() {
+    return [
+      '<div data-post-lang="zh">',
+      '',
+      '## 标题',
+      '',
+      '正文从这里开始。',
+      '',
+      '</div>',
+      '',
+      '<div data-post-lang="en" hidden>',
+      '',
+      '## Title',
+      '',
+      'Start writing here.',
+      '',
+      '</div>',
+      ''
+    ].join(nl())
+  }
+
+  function slugifyClient(input) {
+    const s = String(input || '')
+      .trim()
+      .toLowerCase()
+      .replace(/[\s_]+/g, '-')
+      .replace(/[^a-z0-9\u4e00-\u9fff-]/g, '')
+      .replace(/-+/g, '-')
+      .replace(/^-|-$/g, '')
+      .slice(0, 60)
+    return s || 'post-' + Date.now()
+  }
+
+  async function api(url, opts) {
+    opts = opts || {}
+    const res = await fetch(url, {
+      credentials: 'same-origin',
+      headers: { 'Content-Type': 'application/json', ...(opts.headers || {}) },
+      ...opts
+    })
+    let data = null
+    try {
+      data = await res.json()
+    } catch (_) {}
+    if (!res.ok) throw new Error((data && data.error) || res.statusText || '请求失败')
+    return data
+  }
+
+  function showLogin() {
+    loginView.classList.remove('hidden')
+    dashView.classList.add('hidden')
+  }
+  function showDash() {
+    loginView.classList.add('hidden')
+    dashView.classList.remove('hidden')
+  }
+
+  function setDirty(v) {
+    dirty = v
+    const sub = $('editor-sub')
+    if (!sub) return
+    const base = sub.dataset.base || ''
+    sub.textContent = dirty ? base + (base ? ' · ' : '') + '未保存更改' : base
+  }
+
+  function bindCounts() {
+    const pairs = [
+      ['f-title', 'c-title', 60],
+      ['f-titleEn', 'c-titleEn', 80],
+      ['f-desc', 'c-desc', 180],
+      ['f-descEn', 'c-descEn', 180]
+    ]
+    for (const [fid, cid, max] of pairs) {
+      const el = $(fid)
+      const c = $(cid)
+      if (!el || !c) continue
+      const sync = () => {
+        c.textContent = el.value.length + '/' + max
+      }
+      el.addEventListener('input', sync)
+      sync()
+    }
+    const body = $('f-body')
+    const meta = $('body-meta')
+    const syncBody = () => {
+      const n = body.value.length
+      meta.textContent = n.toLocaleString() + ' 字'
+    }
+    body.addEventListener('input', syncBody)
+    syncBody()
+  }
+
+  function markFormDirty() {
+    setDirty(true)
+    saveLocalDraft()
+  }
+
+  function saveLocalDraft() {
+    if (editor.classList.contains('hidden')) return
+    try {
+      const payload = collectPayload()
+      payload._mode = $('edit-mode').value
+      payload._savedAt = Date.now()
+      localStorage.setItem(DRAFT_KEY, JSON.stringify(payload))
+    } catch (_) {}
+  }
+
+  function clearLocalDraft() {
+    try {
+      localStorage.removeItem(DRAFT_KEY)
+    } catch (_) {}
+  }
+
+  function collectPayload() {
+    return {
+      slug: $('f-slug').value.trim(),
+      title: $('f-title').value.trim(),
+      titleEn: $('f-titleEn').value.trim() || undefined,
+      description: $('f-desc').value.trim(),
+      descriptionEn: $('f-descEn').value.trim() || undefined,
+      publishDate: $('f-date').value.trim(),
+      tags: $('f-tags').value,
+      language: $('f-lang').value.trim(),
+      draft: $('f-draft').checked,
+      body: $('f-body').value
+    }
+  }
+
+  function filteredPosts() {
+    const q = ($('q').value || '').trim().toLowerCase()
+    return postsCache.filter((p) => {
+      if (filterMode === 'draft' && !p.draft) return false
+      if (filterMode === 'published' && p.draft) return false
+      if (!q) return true
+      const hay = [p.title, p.titleEn, p.slug, p.description, ...(p.tags || [])]
+        .join(' ')
+        .toLowerCase()
+      return hay.includes(q)
+    })
+  }
+
+  function renderList() {
+    const rows = filteredPosts()
+    $('list-meta').textContent =
+      '共 ' + postsCache.length + ' 篇 · 当前显示 ' + rows.length + ' 篇'
     listEl.innerHTML = ''
-    if (!data.posts.length) {
-      listEl.innerHTML = '<li class="text-sm text-muted-foreground">还没有文章。</li>'
+    if (!rows.length) {
+      listEl.innerHTML =
+        '<li class="px-2 py-6 text-center text-sm text-muted-foreground">没有匹配的文章</li>'
       return
     }
-    for (const p of data.posts) {
+    for (const p of rows) {
       const li = document.createElement('li')
+      const active = activeSlug === p.slug
+      const badge = p.draft
+        ? '<span class="badge badge-draft">草稿</span>'
+        : '<span class="badge badge-live">已发布</span>'
+      const tags = (p.tags || []).slice(0, 3).map(escapeHtml).join(' · ')
       li.innerHTML =
-        '<div><p class="font-medium">' +
+        '<button type="button" class="post-item' +
+        (active ? ' is-active' : '') +
+        '" data-open="' +
+        escapeHtml(p.slug) +
+        '">' +
+        '<div class="flex items-start justify-between gap-2">' +
+        '<span class="font-medium leading-snug">' +
         escapeHtml(p.title) +
-        '</p><p class="text-xs text-muted-foreground">' +
+        '</span>' +
+        badge +
+        '</div>' +
+        '<div class="text-[11px] text-muted-foreground">' +
         escapeHtml(p.slug) +
         ' · ' +
-        escapeHtml(String(p.publishDate)) +
-        (p.draft ? ' · 草稿' : '') +
-        '</p></div><div class="flex gap-2">' +
-        '<button type="button" data-edit="' +
+        escapeHtml(String(p.publishDate || '').slice(0, 16)) +
+        (tags ? ' · ' + tags : '') +
+        '</div>' +
+        '<div class="mt-1 flex gap-2">' +
+        '<span class="btn btn-ghost !px-2 !py-0.5 text-[11px]" data-edit="' +
         escapeHtml(p.slug) +
-        '" class="rounded-lg border border-border bg-background px-2.5 py-1 text-xs hover:bg-primary-foreground">编辑</button>' +
-        '<button type="button" data-del="' +
+        '">编辑</span>' +
+        '<span class="btn btn-ghost btn-danger !px-2 !py-0.5 text-[11px]" data-del="' +
         escapeHtml(p.slug) +
-        '" class="rounded-lg border border-border px-2.5 py-1 text-xs text-red-500 hover:bg-muted">删除</button></div>'
+        '">删除</span>' +
+        '</div>' +
+        '</button>'
       listEl.appendChild(li)
     }
-    listEl.querySelectorAll('[data-edit]').forEach((btn) => {
-      btn.addEventListener('click', () => openEdit(btn.getAttribute('data-edit')))
+    listEl.querySelectorAll('[data-open]').forEach((btn) => {
+      btn.addEventListener('click', (e) => {
+        if (e.target.closest('[data-del]')) return
+        openEdit(btn.getAttribute('data-open'))
+      })
     })
     listEl.querySelectorAll('[data-del]').forEach((btn) => {
-      btn.addEventListener('click', () => removePost(btn.getAttribute('data-del')))
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation()
+        removePost(btn.getAttribute('data-del'))
+      })
     })
+  }
+
+  async function loadPosts() {
+    const data = await api('/api/author/posts')
+    postsCache = data.posts || []
+    renderList()
   }
 
   async function refreshSession() {
@@ -260,77 +637,229 @@ export const prerender = false
     }
     showDash()
     $('github-hint').textContent = data.github
-      ? '已连接 GitHub，保存将直接提交到仓库。'
-      : '警告：未配置 AUTHOR_GITHUB_TOKEN，无法写入文章。'
+      ? '已连接 GitHub · 保存即提交到 main，等待自动部署即可'
+      : '警告：未配置 AUTHOR_GITHUB_TOKEN，无法写入文章'
     await loadPosts()
     return true
   }
 
+  function showEditor(show) {
+    editor.classList.toggle('hidden', !show)
+    editorEmpty.classList.toggle('hidden', show)
+  }
+
+  function fillForm(values) {
+    $('f-slug').value = values.slug || ''
+    $('f-title').value = values.title || ''
+    $('f-titleEn').value = values.titleEn || ''
+    $('f-desc').value = values.description || ''
+    $('f-descEn').value = values.descriptionEn || ''
+    $('f-tags').value = values.tags || ''
+    $('f-lang').value = values.language || '中 / EN'
+    $('f-date').value = values.publishDate || ''
+    $('f-draft').checked = Boolean(values.draft)
+    $('f-body').value = values.body || ''
+    ;['f-title', 'f-titleEn', 'f-desc', 'f-descEn', 'f-body'].forEach((id) => {
+      $(id).dispatchEvent(new Event('input'))
+    })
+  }
+
   function openCreate() {
+    if (dirty && !confirm('当前有未保存更改，确定新建？')) return
+    activeSlug = null
+    slugTouched = false
     $('edit-mode').value = 'create'
     $('editor-title').textContent = '新建文章'
+    $('editor-sub').dataset.base = '尚未提交到 GitHub'
+    $('editor-sub').textContent = $('editor-sub').dataset.base
     $('f-slug').disabled = false
-    $('f-slug').value = ''
-    $('f-title').value = ''
-    $('f-titleEn').value = ''
-    $('f-desc').value = ''
-    $('f-descEn').value = ''
-    $('f-tags').value = ''
-    $('f-lang').value = '中 / EN'
-    $('f-date').value = new Date().toISOString().slice(0, 16).replace('T', ' ') + ':00'
-    $('f-draft').checked = false
-    $('f-body').value = [
-      '<div data-post-lang="zh">',
-      '',
-      '## 标题',
-      '',
-      '正文',
-      '',
-      '</div>',
-      '',
-      '<div data-post-lang="en" hidden>',
-      '',
-      '## Title',
-      '',
-      'Body',
-      '',
-      '</div>',
-      ''
-    ].join(String.fromCharCode(10))
+    fillForm({
+      slug: '',
+      title: '',
+      titleEn: '',
+      description: '',
+      descriptionEn: '',
+      tags: '',
+      language: '中 / EN',
+      publishDate: new Date().toISOString().slice(0, 16).replace('T', ' ') + ':00',
+      draft: true,
+      body: defaultBody()
+    })
     $('btn-preview').href = '#'
-    editor.classList.remove('hidden')
-    editor.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    $('btn-preview').classList.add('pointer-events-none', 'opacity-40')
+    showEditor(true)
+    setDirty(false)
+    renderList()
+    $('f-title').focus()
   }
 
   async function openEdit(slug) {
-    showStatus('加载文章…')
-    const data = await api('/api/author/posts/' + encodeURIComponent(slug))
-    hideStatus()
-    $('edit-mode').value = 'edit'
-    $('editor-title').textContent = '编辑 · ' + slug
-    $('f-slug').value = slug
-    $('f-slug').disabled = true
-    $('f-title').value = data.meta.title || ''
-    $('f-titleEn').value = data.meta.titleEn || ''
-    $('f-desc').value = data.meta.description || ''
-    $('f-descEn').value = data.meta.descriptionEn || ''
-    $('f-tags').value = (data.meta.tags || []).join(', ')
-    $('f-lang').value = data.meta.language || '中 / EN'
-    $('f-date').value = data.meta.publishDate || ''
-    $('f-draft').checked = Boolean(data.meta.draft)
-    $('f-body').value = data.body || ''
-    $('btn-preview').href = '/blog/' + encodeURIComponent(slug)
-    editor.classList.remove('hidden')
-    editor.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    if (dirty && activeSlug !== slug && !confirm('当前有未保存更改，确定切换？')) return
+    try {
+      toast('加载「' + escapeHtml(slug) + '」…')
+      const data = await api('/api/author/posts/' + encodeURIComponent(slug))
+      activeSlug = slug
+      slugTouched = true
+      $('edit-mode').value = 'edit'
+      $('editor-title').textContent = data.meta.title || slug
+      $('editor-sub').dataset.base = slug
+      $('editor-sub').textContent = slug
+      $('f-slug').disabled = true
+      fillForm({
+        slug: slug,
+        title: data.meta.title || '',
+        titleEn: data.meta.titleEn || '',
+        description: data.meta.description || '',
+        descriptionEn: data.meta.descriptionEn || '',
+        tags: (data.meta.tags || []).join(', '),
+        language: data.meta.language || '中 / EN',
+        publishDate: data.meta.publishDate || '',
+        draft: Boolean(data.meta.draft),
+        body: data.body || ''
+      })
+      $('btn-preview').href = '/blog/' + encodeURIComponent(slug)
+      $('btn-preview').classList.remove('pointer-events-none', 'opacity-40')
+      showEditor(true)
+      setDirty(false)
+      renderList()
+      toast('已打开 ' + escapeHtml(slug))
+    } catch (ex) {
+      toast(escapeHtml(ex.message || '加载失败'), true)
+    }
   }
 
   async function removePost(slug) {
-    if (!confirm('确定删除「' + slug + '」？会从 GitHub 删除该文章目录。')) return
-    showStatus('删除中…')
-    await api('/api/author/posts/' + encodeURIComponent(slug), { method: 'DELETE' })
-    showStatus('已删除，等待重新部署后线上消失。')
-    editor.classList.add('hidden')
-    await loadPosts()
+    if (!confirm('确定删除「' + slug + '」？会从 GitHub 删除该文章目录，且通常不可轻易恢复。')) return
+    try {
+      toast('删除中…')
+      await api('/api/author/posts/' + encodeURIComponent(slug), { method: 'DELETE' })
+      if (activeSlug === slug) {
+        showEditor(false)
+        activeSlug = null
+        setDirty(false)
+      }
+      await loadPosts()
+      toast('已删除 ' + escapeHtml(slug) + '，等待自动部署后前台消失')
+    } catch (ex) {
+      toast(escapeHtml(ex.message || '删除失败'), true)
+    }
+  }
+
+  function insertAround(before, after, placeholder) {
+    const ta = $('f-body')
+    const start = ta.selectionStart
+    const end = ta.selectionEnd
+    const selected = ta.value.slice(start, end) || placeholder || ''
+    const next = ta.value.slice(0, start) + before + selected + after + ta.value.slice(end)
+    ta.value = next
+    const caret = start + before.length + selected.length
+    ta.focus()
+    ta.setSelectionRange(caret, caret)
+    ta.dispatchEvent(new Event('input'))
+    markFormDirty()
+  }
+
+  function insertBlock(text) {
+    const ta = $('f-body')
+    const start = ta.selectionStart
+    const prefix = start > 0 && ta.value[start - 1] !== '\n' ? nl() + nl() : ''
+    const next = ta.value.slice(0, start) + prefix + text + ta.value.slice(start)
+    ta.value = next
+    const caret = start + prefix.length + text.length
+    ta.focus()
+    ta.setSelectionRange(caret, caret)
+    ta.dispatchEvent(new Event('input'))
+    markFormDirty()
+  }
+
+  document.querySelectorAll('[data-md]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const kind = btn.getAttribute('data-md')
+      if (kind === 'h2') insertAround(nl() + '## ', nl(), '标题')
+      else if (kind === 'bold') insertAround('**', '**', '加粗')
+      else if (kind === 'italic') insertAround('*', '*', '斜体')
+      else if (kind === 'link') insertAround('[', '](https://)', '链接文字')
+      else if (kind === 'code') insertAround('`', '`', 'code')
+      else if (kind === 'quote') insertAround(nl() + '> ', nl(), '引用')
+      else if (kind === 'img')
+        insertAround(nl() + '![', '](../../assets/your-image.png)' + nl(), '说明')
+      else if (kind === 'bilingual') {
+        insertBlock(
+          [
+            '<div data-post-lang="zh">',
+            '',
+            '## 中文标题',
+            '',
+            '中文正文',
+            '',
+            '</div>',
+            '',
+            '<div data-post-lang="en" hidden>',
+            '',
+            '## English title',
+            '',
+            'English body',
+            '',
+            '</div>',
+            ''
+          ].join(nl())
+        )
+      }
+    })
+  })
+
+  async function savePost() {
+    const mode = $('edit-mode').value
+    const payload = collectPayload()
+    if (!payload.title) {
+      toast('请填写中文标题', true)
+      return
+    }
+    if (!payload.description || payload.description.length < 10) {
+      toast('摘要至少 10 个字', true)
+      return
+    }
+    if (mode === 'create' && !payload.slug) {
+      payload.slug = slugifyClient(payload.title)
+      $('f-slug').value = payload.slug
+    }
+    try {
+      $('btn-save').disabled = true
+      toast(mode === 'create' ? '创建中…' : '保存中…')
+      let res
+      if (mode === 'create') {
+        res = await api('/api/author/posts', { method: 'POST', body: JSON.stringify(payload) })
+        $('edit-mode').value = 'edit'
+        $('f-slug').disabled = true
+        $('f-slug').value = res.slug
+        activeSlug = res.slug
+        $('btn-preview').href = '/blog/' + encodeURIComponent(res.slug)
+        $('btn-preview').classList.remove('pointer-events-none', 'opacity-40')
+        $('editor-title').textContent = payload.title
+        $('editor-sub').dataset.base = res.slug
+      } else {
+        res = await api('/api/author/posts/' + encodeURIComponent(payload.slug), {
+          method: 'PUT',
+          body: JSON.stringify(payload)
+        })
+      }
+      setDirty(false)
+      clearLocalDraft()
+      await loadPosts()
+      const link = res.commitUrl
+        ? ' · <a href="' + escapeHtml(res.commitUrl) + '" target="_blank" rel="noopener">查看提交</a>'
+        : ''
+      toast(
+        '已保存 <strong>' +
+          escapeHtml(res.slug || payload.slug) +
+          '</strong>。等待 Vercel 自动部署后前台更新' +
+          link
+      )
+    } catch (ex) {
+      toast(escapeHtml(ex.message || '保存失败'), true)
+    } finally {
+      $('btn-save').disabled = false
+    }
   }
 
   $('login-form').addEventListener('submit', async (e) => {
@@ -343,6 +872,7 @@ export const prerender = false
         body: JSON.stringify({ password: $('password').value })
       })
       await refreshSession()
+      toast('登录成功')
     } catch (ex) {
       err.textContent = ex.message || '登录失败'
       err.classList.remove('hidden')
@@ -351,48 +881,79 @@ export const prerender = false
 
   $('btn-logout').addEventListener('click', async () => {
     await api('/api/author/logout', { method: 'POST', body: '{}' })
+    showEditor(false)
     showLogin()
   })
   $('btn-new').addEventListener('click', openCreate)
-  $('btn-cancel').addEventListener('click', () => editor.classList.add('hidden'))
-
-  $('editor-form').addEventListener('submit', async (e) => {
+  $('btn-new-empty').addEventListener('click', openCreate)
+  $('btn-cancel').addEventListener('click', () => {
+    if (dirty && !confirm('有未保存更改，确定关闭？')) return
+    showEditor(false)
+    activeSlug = null
+    setDirty(false)
+    renderList()
+  })
+  $('btn-save').addEventListener('click', savePost)
+  $('editor-form').addEventListener('submit', (e) => {
     e.preventDefault()
-    const mode = $('edit-mode').value
-    const slug = $('f-slug').value.trim()
-    const payload = {
-      slug,
-      title: $('f-title').value.trim(),
-      titleEn: $('f-titleEn').value.trim() || undefined,
-      description: $('f-desc').value.trim(),
-      descriptionEn: $('f-descEn').value.trim() || undefined,
-      publishDate: $('f-date').value.trim(),
-      tags: $('f-tags').value,
-      language: $('f-lang').value.trim(),
-      draft: $('f-draft').checked,
-      body: $('f-body').value
-    }
+    savePost()
+  })
+  $('btn-refresh').addEventListener('click', async () => {
     try {
-      showStatus(mode === 'create' ? '创建中…' : '保存中…')
-      if (mode === 'create') {
-        const res = await api('/api/author/posts', { method: 'POST', body: JSON.stringify(payload) })
-        showStatus('已创建 ' + res.slug + '，部署后见 /blog/' + res.slug)
-        $('edit-mode').value = 'edit'
-        $('f-slug').disabled = true
-        $('f-slug').value = res.slug
-        $('btn-preview').href = '/blog/' + encodeURIComponent(res.slug)
-      } else {
-        await api('/api/author/posts/' + encodeURIComponent(slug), {
-          method: 'PUT',
-          body: JSON.stringify(payload)
-        })
-        showStatus('已保存 ' + slug)
-      }
       await loadPosts()
+      toast('列表已刷新')
     } catch (ex) {
-      showStatus(ex.message || '保存失败', true)
+      toast(escapeHtml(ex.message || '刷新失败'), true)
+    }
+  })
+  $('q').addEventListener('input', renderList)
+  document.querySelectorAll('[data-filter]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      filterMode = btn.getAttribute('data-filter')
+      document.querySelectorAll('[data-filter]').forEach((b) => b.classList.remove('is-active'))
+      btn.classList.add('is-active')
+      renderList()
+    })
+  })
+
+  ;[
+    'f-title',
+    'f-titleEn',
+    'f-desc',
+    'f-descEn',
+    'f-tags',
+    'f-lang',
+    'f-date',
+    'f-body',
+    'f-slug',
+    'f-draft'
+  ].forEach((id) => {
+    const el = $(id)
+    el.addEventListener(id === 'f-draft' ? 'change' : 'input', () => {
+      if (id === 'f-slug') slugTouched = true
+      if (id === 'f-title' && $('edit-mode').value === 'create' && !slugTouched && !$('f-slug').disabled) {
+        $('f-slug').value = slugifyClient($('f-title').value)
+      }
+      markFormDirty()
+    })
+  })
+
+  window.addEventListener('keydown', (e) => {
+    if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 's') {
+      if (!editor.classList.contains('hidden')) {
+        e.preventDefault()
+        savePost()
+      }
     }
   })
 
+  window.addEventListener('beforeunload', (e) => {
+    if (dirty) {
+      e.preventDefault()
+      e.returnValue = ''
+    }
+  })
+
+  bindCounts()
   refreshSession().catch(() => showLogin())
 </script>

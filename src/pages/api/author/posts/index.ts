@@ -23,10 +23,11 @@ export const GET: APIRoute = async ({ request }) => {
       posts.push({
         slug,
         title: meta.title,
+        titleEn: meta.titleEn || '',
         description: meta.description,
         publishDate: meta.publishDate,
         draft: Boolean(meta.draft),
-        tags: meta.tags
+        tags: meta.tags || []
       })
     }
     posts.sort((a, b) => String(b.publishDate).localeCompare(String(a.publishDate)))
@@ -72,8 +73,10 @@ export const POST: APIRoute = async ({ request }) => {
     }
     if (meta.description.length < 10) meta.description = meta.description + '………'
     const md = buildMarkdown(meta, String(body.body || ''))
-    await putFile(path, md, `author: create post ${slug}`)
-    return new Response(JSON.stringify({ ok: true, slug, path }), {
+    const put = await putFile(path, md, `author: create post ${slug}`)
+    const commitSha = put?.commit?.sha
+    const commitUrl = put?.commit?.html_url
+    return new Response(JSON.stringify({ ok: true, slug, path, commitSha, commitUrl }), {
       headers: { 'Content-Type': 'application/json' }
     })
   } catch (e) {
