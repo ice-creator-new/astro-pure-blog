@@ -279,22 +279,24 @@ export const prerender = false
     $('f-lang').value = '中 / EN'
     $('f-date').value = new Date().toISOString().slice(0, 16).replace('T', ' ') + ':00'
     $('f-draft').checked = false
-    $('f-body').value = '<div data-post-lang="zh">
-
-## 标题
-
-正文
-
-</div>
-
-<div data-post-lang="en" hidden>
-
-## Title
-
-Body
-
-</div>
-'
+    $('f-body').value = [
+      '<div data-post-lang="zh">',
+      '',
+      '## 标题',
+      '',
+      '正文',
+      '',
+      '</div>',
+      '',
+      '<div data-post-lang="en" hidden>',
+      '',
+      '## Title',
+      '',
+      'Body',
+      '',
+      '</div>',
+      ''
+    ].join(String.fromCharCode(10))
     $('btn-preview').href = '#'
     editor.classList.remove('hidden')
     editor.scrollIntoView({ behavior: 'smooth', block: 'start' })
