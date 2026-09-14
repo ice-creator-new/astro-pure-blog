@@ -12,6 +12,7 @@ export interface SiteMeta {
   description?: string
   ogImage?: string | undefined
   articleDate?: string | undefined
+  robots?: string | undefined
 }
 
 export interface SocialLink {
