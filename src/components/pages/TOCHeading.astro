@@ -6,11 +6,11 @@ interface Props {
 }
 
 const {
-  heading: { depth, slug, subheadings, text }
+  heading: { depth, slug, subheadings, text, lang }
 } = Astro.props
 ---
 
-<li>
+<li data-post-lang={lang}>
   <div class='relative'>
     <span
       class='absolute top-[5%] w-[2px] rounded transition-colors duration-300 [&.highlight-bg]:bg-primary [&.readed]:bg-input'

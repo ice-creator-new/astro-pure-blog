@@ -18,6 +18,8 @@ export { getFormattedDate } from './date'
 // Generate Toc
 export { generateToc } from './generateToc'
 export type { TocItem } from './generateToc'
+export { tagHeadingsByLang } from './tagHeadingsByLang'
+export type { LangHeading } from './tagHeadingsByLang'
 
 // Link Preview
 export { safeGetDOM, parseOpenGraph } from './linkPreview'

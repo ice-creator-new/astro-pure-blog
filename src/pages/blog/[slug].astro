@@ -2,7 +2,7 @@
 import PostLayout from '@/layouts/BlogPost.astro'
 import { type CollectionEntry } from 'astro:content'
 
-import { getAllCollections } from '@/utils'
+import { getAllCollections, tagHeadingsByLang } from '@/utils'
 
 export const prerender = true
 
@@ -17,8 +17,8 @@ type Props = CollectionEntry<'post'>
 
 const post = Astro.props
 const { Content, headings: allHeadings } = await post.render()
-// Bilingual posts ship both zh/en bodies; TOC would duplicate — hide it.
-const headings = post.data.titleEn ? [] : allHeadings
+// Bilingual posts: keep TOC but tag headings so only the active language shows.
+const headings = tagHeadingsByLang(post.body ?? '', allHeadings)
 ---
 
 <PostLayout post={post} {headings}>

@@ -6,7 +6,7 @@ import { generateToc } from '@/utils'
 import TOCHeading from './TOCHeading.astro'
 
 interface Props {
-  headings: MarkdownHeading[]
+  headings: (MarkdownHeading & { lang?: 'zh' | 'en' })[]
   class?: string
 }
 
@@ -17,7 +17,7 @@ const toc = generateToc(headings)
 
 <aside class={className} id='sidebar' {...props}>
   <toc-heading>
-    <h2 class='font-semibold'>TABLE OF CONTENTS</h2>
+    <h2 class='font-semibold' data-i18n='blog.toc'>目录</h2>
     <ul class='mt-4 max-h-[70vh] overflow-y-scroll text-card-foreground'>
       {toc.map((heading) => <TOCHeading heading={heading} />)}
     </ul>
@@ -25,10 +25,6 @@ const toc = generateToc(headings)
 </aside>
 
 <script>
-  // This script tag is useful only if you want to display the TOC alongside the blog post...
-  // ... and highlight the section that the user is currently reading through.
-  // Feel free to remove this tag if you don't need this type of functionality.
-
   interface TOCLink {
     element: HTMLAnchorElement
     progressBar: HTMLElement
@@ -47,16 +43,45 @@ const toc = generateToc(headings)
 
     constructor() {
       super()
+      this.tagLinksFromDom()
+      this.refreshTargets()
+    }
 
-      // Initialize the headings and tocLinks
+    tagLinksFromDom() {
+      this.querySelectorAll('a[href^="#"]').forEach((node) => {
+        const link = node as HTMLAnchorElement
+        const li = link.closest('li') as HTMLElement | null
+        if (!li || li.hasAttribute('data-post-lang')) return
+        const slug = (link.getAttribute('href') || '').substring(1)
+        const heading = document.getElementById(slug)
+        const root = heading?.closest('[data-post-lang]') as HTMLElement | null
+        const lang = root?.getAttribute('data-post-lang')
+        if (lang) li.setAttribute('data-post-lang', lang)
+      })
+    }
+
+    isVisible(el: HTMLElement) {
+      if (el.hidden) return false
+      const langRoot = el.closest('[data-post-lang]') as HTMLElement | null
+      if (langRoot?.hidden) return false
+      return true
+    }
+
+    refreshTargets = () => {
       this.headings = Array.from(
         document.querySelectorAll('article h2, article h3, article h4, article h5, article h6')
-      )
-      this.tocLinks = Array.from(this.querySelectorAll('a[href^="#"]')).map((link) => ({
-        element: link as HTMLAnchorElement,
-        progressBar: link.previousElementSibling as HTMLElement,
-        slug: (link.getAttribute('href') || '').substring(1)
-      }))
+      ).filter((el) => this.isVisible(el as HTMLElement)) as HTMLElement[]
+
+      this.tocLinks = Array.from(this.querySelectorAll('a[href^="#"]'))
+        .map((link) => ({
+          element: link as HTMLAnchorElement,
+          progressBar: link.previousElementSibling as HTMLElement,
+          slug: (link.getAttribute('href') || '').substring(1)
+        }))
+        .filter(({ element }) => {
+          const li = element.closest('li') as HTMLElement | null
+          return !li || this.isVisible(li)
+        })
     }
 
     updatePositionAndStyle = () => {
@@ -78,19 +103,19 @@ const toc = generateToc(headings)
       })
 
       this.tocLinks.forEach(({ element: el, progressBar: bar, slug }, i) => {
-        const { inView, progress } = this.headingProgress[slug]
+        const { inView, progress } = this.headingProgress[slug] || { inView: false, progress: 0 }
         if (this.headingProgress[slug]) {
           el.classList.toggle('highlight', inView)
           el.classList.toggle('highlight-bg-translucent', inView)
           el.classList.toggle(
             'rounded-t-2xl',
-            inView && (i == 0 || !this.headingProgress[this.tocLinks[i - 1]?.slug].inView)
+            inView && (i == 0 || !this.headingProgress[this.tocLinks[i - 1]?.slug]?.inView)
           )
           el.classList.toggle(
             'rounded-b-2xl',
             inView &&
               (i == this.tocLinks.length - 1 ||
-                !this.headingProgress[this.tocLinks[i + 1]?.slug].inView)
+                !this.headingProgress[this.tocLinks[i + 1]?.slug]?.inView)
           )
           bar.classList.toggle('readed', !inView && progress == 1)
           bar.classList.toggle('highlight-bg', inView)
@@ -100,25 +125,29 @@ const toc = generateToc(headings)
     }
 
     connectedCallback() {
-      // Smooth scroll
-      this.tocLinks.forEach((link) => {
-        link.element.addEventListener('click', (e) => {
+      // Bind every TOC link once (including the hidden language); targets refresh on locale change.
+      Array.from(this.querySelectorAll('a[href^="#"]')).forEach((node) => {
+        const element = node as HTMLAnchorElement
+        const slug = (element.getAttribute('href') || '').substring(1)
+        element.addEventListener('click', (e) => {
           e.preventDefault()
-          // Push the history to add the hash at the end of the URL
-          const directHeading = this.headings.find((heading) => heading.id === link.slug)
+          this.refreshTargets()
+          const directHeading =
+            this.headings.find((heading) => heading.id === slug) ||
+            (document.getElementById(slug) as HTMLElement | null)
           if (directHeading) {
-            // Push the history to add the hash at the end of the URL
-            history.pushState(null, directHeading.textContent || '', this.getAttribute('href'))
+            history.pushState(null, directHeading.textContent || '', `#${slug}`)
             directHeading.scrollIntoView({ behavior: 'smooth' })
-          } else {
-            console.warn(`No heading found for slug: ${link.slug}`)
           }
         })
       })
 
-      // Initial first and listen to scroll event
       setInterval(this.updatePositionAndStyle, 100)
       window.addEventListener('scroll', this.updatePositionAndStyle)
+      window.addEventListener('ice-locale-change', () => {
+        this.refreshTargets()
+        this.updatePositionAndStyle()
+      })
     }
   }
 

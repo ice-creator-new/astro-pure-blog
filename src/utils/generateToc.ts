@@ -2,6 +2,7 @@ import type { MarkdownHeading } from 'astro'
 
 export interface TocItem extends MarkdownHeading {
   subheadings: TocItem[]
+  lang?: 'zh' | 'en'
 }
 
 function diveChildren(item: TocItem, depth: number): TocItem[] {
@@ -13,7 +14,7 @@ function diveChildren(item: TocItem, depth: number): TocItem[] {
   }
 }
 
-export function generateToc(headings: readonly MarkdownHeading[]) {
+export function generateToc(headings: readonly (MarkdownHeading & { lang?: 'zh' | 'en' })[]) {
   // this ignores/filters out h1 element(s)
   const bodyHeadings = [...headings.filter(({ depth }) => depth > 1)]
   const toc: TocItem[] = []
