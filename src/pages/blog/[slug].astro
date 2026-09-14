@@ -16,7 +16,9 @@ export async function getStaticPaths() {
 type Props = CollectionEntry<'post'>
 
 const post = Astro.props
-const { Content, headings } = await post.render()
+const { Content, headings: allHeadings } = await post.render()
+// Bilingual posts ship both zh/en bodies; TOC would duplicate — hide it.
+const headings = post.data.titleEn ? [] : allHeadings
 ---
 
 <PostLayout post={post} {headings}>

@@ -2,6 +2,16 @@
 import { messages } from '../../i18n/messages'
 ---
 
+<style is:global>
+  html[data-locale='en'] [data-post-lang='zh'] {
+    display: none !important;
+  }
+  html[data-locale='zh'] [data-post-lang='en'],
+  html:not([data-locale]) [data-post-lang='en'] {
+    display: none !important;
+  }
+</style>
+
 <script is:inline define:vars={{ messages }}>
   ;(function () {
     const STORAGE_KEY = 'ice-blog-lang'
@@ -46,7 +56,22 @@ import { messages } from '../../i18n/messages'
         if (key && table[key] != null) el.setAttribute('aria-label', table[key])
       })
 
-      // Update language toggle label
+      // Dual-language text nodes (article title / description / list cards)
+      document.querySelectorAll('[data-i18n-zh]').forEach((el) => {
+        const zh = el.getAttribute('data-i18n-zh')
+        const en = el.getAttribute('data-i18n-en')
+        if (zh == null) return
+        el.textContent = locale === 'en' && en != null ? en : zh
+      })
+
+      // Article body language blocks
+      document.querySelectorAll('[data-post-lang]').forEach((el) => {
+        const lang = el.getAttribute('data-post-lang')
+        const show = lang === locale
+        el.hidden = !show
+        el.setAttribute('aria-hidden', show ? 'false' : 'true')
+      })
+
       const btn = document.getElementById('toggleLang')
       if (btn) {
         const label = btn.querySelector('[data-lang-label]')
@@ -63,7 +88,6 @@ import { messages } from '../../i18n/messages'
     }
 
     const locale = detectLocale()
-    // Apply ASAP to reduce flash
     applyLocale(locale)
     window.__iceApplyLocale = applyLocale
     window.__iceGetLocale = () => document.documentElement.dataset.locale || locale

@@ -57,7 +57,9 @@ const { remarkPluginFrontmatter } = await render()
       <div class='flex justify-between'>
         <div>
           {data.draft && <span class='text-red-500'>(Draft) </span>}
-          {data.title}
+          <span data-i18n-zh={data.title} data-i18n-en={data.titleEn || data.title}>
+            {data.title}
+          </span>
         </div>
         <svg
           xmlns='http://www.w3.org/2000/svg'
@@ -91,7 +93,9 @@ const { remarkPluginFrontmatter } = await render()
                 data.heroImage && 'sm:me-24'
               )}
             >
-              {data.description}
+              <span data-i18n-zh={data.description} data-i18n-en={data.descriptionEn || data.description}>
+                {data.description}
+              </span>
             </p>
             <div class='flex items-center gap-2 py-1.5 text-sm italic leading-4 text-muted-foreground sm:py-3'>
               {/* reading time */}

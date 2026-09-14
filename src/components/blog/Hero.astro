@@ -84,13 +84,19 @@ const dateTimeOptions: Intl.DateTimeFormatOptions = {
           <svg class='size-5'>
             <use href='/icons/project.svg#mingcute-earth-2-line' />
           </svg>
-          {data.language}
+          <span data-i18n-zh={data.language} data-i18n-en={data.titleEn ? 'zh / en' : data.language}>
+            {data.language}
+          </span>
         </span>
       )
     }
   </div>
 
-  <h1 class='mt-4 text-2xl font-medium sm:mb-2 sm:mt-6 sm:text-3xl'>
+  <h1
+    class='mt-4 text-2xl font-medium sm:mb-2 sm:mt-6 sm:text-3xl'
+    data-i18n-zh={data.title}
+    data-i18n-en={data.titleEn || data.title}
+  >
     {data.title}
   </h1>
 
@@ -119,7 +125,11 @@ const dateTimeOptions: Intl.DateTimeFormatOptions = {
   }
 
   <div class='mt-3 italic'>
-    <blockquote class='text-sm text-muted-foreground'><q>{data.description}</q></blockquote>
+    <blockquote class='text-sm text-muted-foreground'>
+      <q data-i18n-zh={data.description} data-i18n-en={data.descriptionEn || data.description}>
+        {data.description}
+      </q>
+    </blockquote>
     {!data.draft && <PageInfo class='mt-1' path={`/blog/${slug}`} />}
   </div>
 </div>
