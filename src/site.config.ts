@@ -7,7 +7,7 @@ export const siteConfig: SiteConfig = {
   // Meta property used to construct the meta title property, found in src/components/BaseHead.astro L:11
   title: 'ice 的博客',
   // Meta property used to generate your sitemap and canonical URLs in your final build
-  site: 'https://astro-pure-blog.vercel.app',
+  site: 'https://icesniper.vercel.app',
   // Meta property used as the default description meta property
   description: '记录想法、项目与日常',
   // HTML lang property, found in src/layouts/Base.astro L:18
