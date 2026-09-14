@@ -32,7 +32,7 @@ heroImage:
 
 ![用户感知：通透、层次与注意力](./hero.png)
 
-*配图说明：左为「内容被实色挡死」的压迫感；中为毛玻璃「糊掉背景、稳住文字」；右为液态玻璃「背景仍可读、边缘与高光在动」——三帧并排，突出感知差异而非实现细节。*
+*配图说明：左毛玻璃（模糊稳住文字），右液态玻璃（折射与边缘高光）；同一设计语境下的材质对照。*
 
 公开资料上，Apple 在 WWDC 2025 将 Liquid Glass 描述为一种半透明材料：会反射与折射周围环境，并随内容与情境动态变化，用于控件、导航、图标与小组件等，并横跨 iOS / iPadOS / macOS / watchOS / tvOS 等系统层体验（参见 [Apple Newsroom](https://www.apple.com/newsroom/2025/06/apple-introduces-a-delightful-and-elegant-new-software-design/) 与 [Adopting Liquid Glass](https://developer.apple.com/documentation/TechnologyOverviews/adopting-liquid-glass)）。毛玻璃一侧，更常见于 Web / Android 自定义表面：半透明填色 + 背景模糊（如 CSS `backdrop-filter`，或 Android 12+ 窗口背景模糊能力；AOSP 文档也给出磨砂玻璃类半径的经验区间，见 [Window blurs](https://source.android.com/docs/core/display/window-blurs)）。两者都不是「更高级的半透明」，而是两种不同的**信息分层策略**。
 
@@ -51,7 +51,7 @@ heroImage:
 
 ![液态玻璃与毛玻璃对照](./compare-frosted-vs-liquid.png)
 
-*配图说明：同一张复杂壁纸上，左卡为毛玻璃（文字稳定、背景细节被糊掉），右卡为液态玻璃（背景细节仍可辨、边缘高光与轻微折射更明显）；底部标注「静态可读」vs「动态存在感」。*
+*配图说明：同一背景上的两张设置面板——左为毛玻璃静态可读，右为液态玻璃动态光学；菜单结构一致，差异只在材质。*
 
 一句话区分：**毛玻璃是在「糊」背景以换可读；液态玻璃是在「活」的光学层上做导航，并声明内容优先。**
 
