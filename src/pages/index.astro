@@ -21,7 +21,7 @@ const allPosts = await getAllCollections()
 const allPostsByDate = sortMDByDate(allPosts).slice(0, MAX_POSTS)
 ---
 
-<PageLayout meta={{ title: 'Home' }} highlightColor='#659EB966'>
+<PageLayout meta={{ title: '首页' }} highlightColor='#659EB966'>
   <div class='flex w-full flex-col items-center'>
     <section class='animate mb-10 flex flex-col items-center gap-y-7' id='content-header'>
       <Image
@@ -34,15 +34,16 @@ const allPostsByDate = sortMDByDate(allPosts).slice(0, MAX_POSTS)
       <div class='flex flex-col items-center gap-y-4'>
         <h1 class='text-3xl font-bold'>{siteConfig.author}</h1>
         <div class='flex flex-wrap justify-center gap-x-7 gap-y-3'>
-          <Label title='China'>
+          <Label title='中国' data-i18n='home.location'>
             <svg class='size-5' slot='icon'>
               <use href='/icons/social.svg#mingcute-location-line'></use>
             </svg>
           </Label>
           <Label
-            title='Source code'
+            title='源码'
+            data-i18n='home.source'
             as='a'
-            href='https://github.com/cworld1/astro-theme-pure'
+            href='https://github.com/IceSniperring/astro-pure-blog'
             target='_blank'
           >
             <svg class='size-5' slot='icon'>
@@ -54,7 +55,7 @@ const allPostsByDate = sortMDByDate(allPosts).slice(0, MAX_POSTS)
 
       {/* Get template */}
       <a
-        href='https://github.com/cworld1/astro-theme-pure'
+        href='https://github.com/IceSniperring/astro-pure-blog'
         target='_blank'
         class='flex flex-row items-center gap-x-3 rounded-full border border-border px-4 py-2 text-sm shadow-sm transition-shadow hover:shadow-md'
       >
@@ -64,23 +65,21 @@ const allPostsByDate = sortMDByDate(allPosts).slice(0, MAX_POSTS)
           ></span>
           <span class='size-2 rounded-full bg-green-400'></span>
         </span>
-        <p class='font-medium text-muted-foreground'>Get Template</p>
+        <p class='font-medium text-muted-foreground' data-i18n='home.getTemplate'>获取模板</p>
       </a>
     </section>
 
     <div id='content' class='flex flex-col gap-y-10 md:w-4/5 lg:w-5/6'>
-      <Section title='About'>
-        <p class='text-muted-foreground'>Developer / Designer</p>
-        <p class='text-muted-foreground'>
-          Lorem ipsum dolor sit amet, vidit suscipit at mei. Quem denique mea id. Usu ei regione
-          indoctum dissentiunt, cu meliore fuisset mei, vel quod voluptua ne. Ex dicat impedit mel,
-          at eum oratio possit voluptatum.
+      <Section title='关于' data-i18n-title='home.about'>
+        <p class='text-muted-foreground' data-i18n='home.about.role'>开发者 / 设计师</p>
+        <p class='text-muted-foreground' data-i18n='home.about.body'>
+          这里是 Ice 的个人博客。我会写项目笔记、产品想法，以及一些日常随笔。
         </p>
-        <Button title='More about me' class='w-fit self-end' href='/about' style='ahead' />
+        <Button title='了解更多' data-i18n='home.about.more' class='w-fit self-end' href='/about' style='ahead' />
       </Section>
       {
         allPostsByDate.length > 0 && (
-          <Section title='Posts'>
+          <Section title='最新文章' data-i18n-title='home.posts'>
             <ul class='flex flex-col gap-y-1.5 sm:gap-y-2'>
               {allPostsByDate.map((p) => (
                 <li class='flex flex-col gap-x-2 sm:flex-row'>
@@ -88,7 +87,7 @@ const allPostsByDate = sortMDByDate(allPosts).slice(0, MAX_POSTS)
                 </li>
               ))}
             </ul>
-            <Button title='More posts' class='w-fit self-end' href='/blog' style='ahead' />
+            <Button title='更多文章' data-i18n='home.posts.more' class='w-fit self-end' href='/blog' style='ahead' />
           </Section>
         )
       }
@@ -122,7 +121,7 @@ const allPostsByDate = sortMDByDate(allPosts).slice(0, MAX_POSTS)
       />
     </Section> */
       }
-      <Section title='Education'>
+      <Section title='教育' data-i18n-title='home.education'>
         <Card
           as='a'
           heading='Lorem ipsum'
@@ -181,7 +180,7 @@ const allPostsByDate = sortMDByDate(allPosts).slice(0, MAX_POSTS)
         />
       </Section>
 
-      <Section title='Skills'>
+      <Section title='技能' data-i18n-title='home.skills'>
         <SkillLayout title='Languages' skills={languages} />
         <SkillLayout title='Frontend' skills={frontend} />
         <SkillLayout title='Backend' skills={backend} />

@@ -24,13 +24,15 @@ const { class: className } = Astro.props
       </div>
     </aside>
     <p id='searchReadout' class='mb-3 text-muted-foreground'></p>
-    <section aria-label='Search Results'>
+    <section aria-label='搜索结果' data-i18n-aria='search.aria'>
       <ul id='searchResults' class='flex flex-col gap-y-3 sm:gap-y-4'></ul>
     </section>
   </div>
 </search-component>
 
 <script>
+  // @ts-nocheck
+
   import type { CollectionEntry, CollectionKey } from 'astro:content'
   import Fuse, { type FuseResult, type FuseResultMatch } from 'fuse.js'
 
@@ -104,7 +106,9 @@ const { class: className } = Astro.props
     fetchSearchResults(fuse: Fuse<CollectionEntry<CollectionKey>>, search: string) {
       const searchResult = fuse.search(search)
 
-      this.searchReadout.textContent = search ? `Search results for “${search}”` : ''
+      const loc = document.documentElement.dataset.locale || 'zh'
+        const tpl = (window.__iceMessages && window.__iceMessages[loc] && window.__iceMessages[loc]['search.resultsFor']) || (loc === 'en' ? 'Search results for “{q}”' : '“{q}” 的搜索结果')
+        this.searchReadout.textContent = search ? tpl.replace('{q}', search) : ''
       this.resultsList.innerHTML =
         searchResult.length > 0
           ? this.generateSearchList(searchResult)

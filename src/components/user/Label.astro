@@ -2,6 +2,8 @@
 import { cn } from '@/utils'
 
 const { class: className, as: Tag = 'div', title, href, ...props } = Astro.props
+const i18nKey = props['data-i18n']
+delete props['data-i18n']
 ---
 
 <Tag
@@ -14,5 +16,5 @@ const { class: className, as: Tag = 'div', title, href, ...props } = Astro.props
   {...props}
 >
   <slot name='icon' />
-  <p>{title}</p>
+  <p data-i18n={i18nKey}>{title}</p>
 </Tag>

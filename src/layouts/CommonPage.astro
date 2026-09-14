@@ -25,7 +25,7 @@ const { title, headings, info, ...props } = Astro.props
 
 <PageLayout meta={{ title }} {...props}>
   <div class='w-full'>
-    <Button title='Back' href='/' style='back' />
+    <Button title='返回' data-i18n='common.back' href='/' style='back' />
     <div class='mt-6 w-full items-start gap-x-10 md:flex'>
       {
         !!headings?.length && (

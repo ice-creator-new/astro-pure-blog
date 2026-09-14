@@ -25,7 +25,7 @@ const socialImage = heroImage?.src ?? '/images/social-card.png'
 
 <PageLayout meta={{ title, description, ogImage: socialImage }}>
   <div class='w-full'>
-    <Button title='Back' href={back ?? '/'} style='back' />
+    <Button title='返回' data-i18n='common.back' href={back ?? '/'} style='back' />
     <div class='mt-6 w-full items-start gap-x-10 md:flex'>
       {
         !!headings.length && (

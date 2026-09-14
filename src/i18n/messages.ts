@@ -1,0 +1,108 @@
+export type Locale = 'zh' | 'en'
+
+export const locales: Locale[] = ['zh', 'en']
+
+export const messages: Record<Locale, Record<string, string>> = {
+  zh: {
+    'site.title': 'Ice 的博客',
+    'site.description': '记录想法、项目与日常',
+    'nav.blog': '文章',
+    'nav.docs': '文档',
+    'nav.projects': '项目',
+    'nav.links': '友链',
+    'nav.about': '关于',
+    'nav.search': '搜索',
+    'nav.menu': '菜单',
+    'nav.theme': '切换主题',
+    'nav.lang': '语言',
+    'nav.lang.zh': '中文',
+    'nav.lang.en': 'English',
+    'common.back': '返回',
+    'common.home': '首页',
+    'home.metaTitle': '首页',
+    'home.location': '中国',
+    'home.source': '源码',
+    'home.getTemplate': '获取模板',
+    'home.about': '关于',
+    'home.about.role': '开发者 / 设计师',
+    'home.about.body':
+      '这里是 Ice 的个人博客。我会写项目笔记、产品想法，以及一些日常随笔。',
+    'home.about.more': '了解更多',
+    'home.posts': '最新文章',
+    'home.posts.more': '更多文章',
+    'home.skills': '技能',
+    'home.projects': '项目',
+    'search.title': '搜索',
+    'search.description': '搜索全站文章',
+    'search.resultsFor': '“{q}” 的搜索结果',
+    'search.aria': '搜索结果',
+    'blog.back': '返回文章列表',
+    'docs.title': '文档',
+    'docs.heading': 'Astro Theme Pure 文档',
+    'docs.themeDoc': '主题文档',
+    'docs.feedback': '反馈',
+    'docs.feedbackBody': '如有问题，可到 Github Issues 寻求社区支持。',
+    'projects.title': '项目',
+    'links.title': '友链',
+    'about.title': '关于',
+    'archives.title': '归档',
+    'tags.title': '标签',
+    'footer.terms': '条款',
+  },
+  en: {
+    'site.title': "Ice's Blog",
+    'site.description': 'Notes on ideas, projects, and daily life',
+    'nav.blog': 'Blog',
+    'nav.docs': 'Docs',
+    'nav.projects': 'Projects',
+    'nav.links': 'Links',
+    'nav.about': 'About',
+    'nav.search': 'Search',
+    'nav.menu': 'Menu',
+    'nav.theme': 'Toggle theme',
+    'nav.lang': 'Language',
+    'nav.lang.zh': '中文',
+    'nav.lang.en': 'English',
+    'common.back': 'Back',
+    'common.home': 'Home',
+    'home.metaTitle': 'Home',
+    'home.location': 'China',
+    'home.source': 'Source code',
+    'home.getTemplate': 'Get Template',
+    'home.about': 'About',
+    'home.about.role': 'Developer / Designer',
+    'home.about.body':
+      "This is Ice's personal blog — project notes, product thoughts, and occasional essays.",
+    'home.about.more': 'More about me',
+    'home.posts': 'Posts',
+    'home.posts.more': 'More posts',
+    'home.skills': 'Skills',
+    'home.projects': 'Projects',
+    'search.title': 'Search',
+    'search.description': 'Search posts across the blog',
+    'search.resultsFor': 'Search results for “{q}”',
+    'search.aria': 'Search Results',
+    'blog.back': 'Back to blog',
+    'docs.title': 'Docs',
+    'docs.heading': 'Docs of Astro Theme Pure',
+    'docs.themeDoc': 'Theme documentation',
+    'docs.feedback': 'Feedback',
+    'docs.feedbackBody': 'If you have any problems, check Github Issues for community support.',
+    'projects.title': 'Projects',
+    'links.title': 'Links',
+    'about.title': 'About',
+    'archives.title': 'Archives',
+    'tags.title': 'Tags',
+    'footer.terms': 'Terms',
+  },
+}
+
+export function t(locale: Locale, key: string, vars?: Record<string, string>) {
+  let s = messages[locale][key] ?? messages.zh[key] ?? key
+  if (vars) {
+    for (const [k, v] of Object.entries(vars)) {
+      s = s.replace(`{${k}}`, v)
+    }
+  }
+  return s
+}

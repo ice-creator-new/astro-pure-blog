@@ -5,6 +5,7 @@ import BaseHead from '@/components/BaseHead.astro'
 import Footer from '@/components/layout/Footer.astro'
 import Header from '@/components/layout/Header.astro'
 import ThemeProvider from '@/components/layout/ThemeProvider.astro'
+import I18nProvider from '@/components/layout/I18nProvider.astro'
 import { siteConfig } from '@/site-config'
 
 // Import the global.css file here so that it is included on
@@ -25,6 +26,7 @@ const {
 <html lang={siteConfig.lang}>
   <head>
     <BaseHead articleDate={articleDate} description={description} ogImage={ogImage} title={title} />
+    <I18nProvider />
     <ThemeProvider />
   </head>
 

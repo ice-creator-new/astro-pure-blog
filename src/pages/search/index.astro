@@ -10,15 +10,15 @@ export const prerender = true
 const allPosts = await getAllCollections()
 
 const meta = {
-  description: 'Search relative posts of the whole blog',
-  title: 'Search'
+  description: '搜索全站文章',
+  title: '搜索'
 }
 ---
 
 <PageLayout {meta}>
   <div class='w-full'>
-    <Button title='Back' href='/blog' style='back' />
-    <h1 class='mb-6 mt-6 text-3xl font-medium sm:mt-10'>Search</h1>
+    <Button title='返回' data-i18n='blog.back' href='/blog' style='back' />
+    <h1 class='mb-6 mt-6 text-3xl font-medium sm:mt-10' data-i18n='search.title'>搜索</h1>
 
     <p class='animate'>
       Enter a search term or phrase to search the blog. If you cannot find what you want, try <a

@@ -2,6 +2,8 @@
 import { cn } from '@/utils'
 
 const { as: Tag = 'a', class: className, title, href, style = 'button', ...props } = Astro.props
+const i18nKey = props['data-i18n']
+delete props['data-i18n']
 ---
 
 <Tag
@@ -45,7 +47,7 @@ const { as: Tag = 'a', class: className, title, href, style = 'button', ...props
     }
   </slot>
   <slot>
-    {title && <p class='my-0'>{title}</p>}
+    {title && <p class='my-0' data-i18n={i18nKey}>{title}</p>}
   </slot>
   <slot name='after'>
     {

@@ -17,7 +17,7 @@ import { menuLinks, siteConfig } from '@/site-config'
       <a
         class='flex-none text-xl font-semibold transition-all duration-300 group-[.not-top]:ms-3 sm:group-[.not-top]:ms-5'
         href='/'
-        aria-label='Brand'>{siteConfig.title}</a
+        aria-label='Brand' data-i18n='site.title'>{siteConfig.title}</a
       >
 
       <!-- menu -->
@@ -34,15 +34,30 @@ import { menuLinks, siteConfig } from '@/site-config'
             class='flex flex-col items-center justify-center gap-x-5 gap-y-2 overflow-hidden transition-colors sm:flex-row sm:gap-x-7'
           >
             {
-              menuLinks.map((item) => (
-                <a
-                  href={item.link}
-                  class='w-full flex-none grow py-2 text-right text-[1.05rem] font-medium hover:text-primary sm:w-fit'
-                  aria-label='Nav Menu Item'
-                >
-                  {item.label}
-                </a>
-              ))
+              menuLinks.map((item) => {
+                const key =
+                  item.link === '/blog'
+                    ? 'nav.blog'
+                    : item.link === '/docs/list'
+                      ? 'nav.docs'
+                      : item.link === '/projects'
+                        ? 'nav.projects'
+                        : item.link === '/links'
+                          ? 'nav.links'
+                          : item.link === '/about'
+                            ? 'nav.about'
+                            : ''
+                return (
+                  <a
+                    href={item.link}
+                    class='w-full flex-none grow py-2 text-right text-[1.05rem] font-medium hover:text-primary sm:w-fit'
+                    aria-label='Nav Menu Item'
+                    data-i18n={key || undefined}
+                  >
+                    {item.label}
+                  </a>
+                )
+              })
             }
             <div class='flex w-full grow flex-row justify-end gap-x-3 sm:w-fit sm:gap-x-5'>
               {
@@ -53,8 +68,8 @@ import { menuLinks, siteConfig } from '@/site-config'
                 </svg>
               </a> */
               }
-              <a class='px-1 py-2' href='/search' title='Search'>
-                <span class='sr-only'>Search</span>
+              <a class='px-1 py-2' href='/search' title='Search' data-i18n-title='nav.search'>
+                <span class='sr-only' data-i18n='nav.search'>搜索</span>
                 <svg class='size-5'>
                   <use href='/icons/header.svg#mingcute-search-2-line'></use>
                 </svg>
@@ -66,10 +81,19 @@ import { menuLinks, siteConfig } from '@/site-config'
         <!-- buttons -->
         <div class='flex gap-x-4 transition-all group-[.not-top]:me-1.5 group-[.not-top]:gap-x-2'>
           <button
+            id='toggleLang'
+            type='button'
+            class='box-content min-w-5 rounded-md border px-1.5 py-1.5 text-xs font-semibold transition-colors hover:bg-border sm:group-[.not-top]:rounded-xl'
+            title='Language'
+            aria-label='Language'
+          >
+            <span data-lang-label>EN</span>
+          </button>
+          <button
             id='toggleDarkMode'
             class='group/dark box-content size-5 rounded-md border p-1.5 transition-colors hover:bg-border sm:group-[.not-top]:rounded-xl'
           >
-            <span class='sr-only'>Dark Theme</span>
+            <span class='sr-only' data-i18n='nav.theme'>切换主题</span>
             <svg class='system size-5 transition-colors group-hover/dark:text-primary'>
               <use href='/icons/header.svg#ph-desktop'></use>
             </svg>
@@ -84,7 +108,7 @@ import { menuLinks, siteConfig } from '@/site-config'
             id='toggleMenu'
             class='rounded-md border p-1.5 transition-colors hover:bg-border sm:hidden sm:group-[.not-top]:rounded-xl'
           >
-            <span class='sr-only'>Menu</span>
+            <span class='sr-only' data-i18n='nav.menu'>菜单</span>
             <svg class='size-5'>
               <use href='/icons/header.svg#mingcute-menu-line'></use>
             </svg>
