@@ -13,8 +13,8 @@ tags:
 language: "中 / EN"
 draft: false
 heroImage:
-  src: ./hero.png
-  alt: "Liquid Glass vs Frosted Glass — UX comparison"
+  src: ./hero.jpg
+  alt: "Apple Liquid Glass across devices (Apple Newsroom)"
   color: "#4A90A4"
 ---
 
@@ -30,9 +30,9 @@ heroImage:
 
 液态玻璃（Liquid Glass）与毛玻璃 / 磨砂玻璃（Frosted Glass，常被归入 Glassmorphism）都在卖「通透 + 层次」，但卖法不同。前者更强调**会动、会跟着环境变、像真玻璃一样折射与流动**；后者更强调**把背后内容糊掉，换一份稳定、可读的半透明表面**。
 
-![用户感知：通透、层次与注意力](./hero.png)
+![Apple Liquid Glass 跨设备主视觉](./hero.jpg)
 
-*配图说明：左毛玻璃（模糊稳住文字），右液态玻璃（折射与边缘高光）；同一设计语境下的材质对照。*
+*来源：[Apple Newsroom — Liquid Glass 新设计语言](https://www.apple.com/newsroom/2025/06/apple-introduces-a-delightful-and-elegant-new-software-design/)*
 
 公开资料上，Apple 在 WWDC 2025 将 Liquid Glass 描述为一种半透明材料：会反射与折射周围环境，并随内容与情境动态变化，用于控件、导航、图标与小组件等，并横跨 iOS / iPadOS / macOS / watchOS / tvOS 等系统层体验（参见 [Apple Newsroom](https://www.apple.com/newsroom/2025/06/apple-introduces-a-delightful-and-elegant-new-software-design/) 与 [Adopting Liquid Glass](https://developer.apple.com/documentation/TechnologyOverviews/adopting-liquid-glass)）。毛玻璃一侧，更常见于 Web / Android 自定义表面：半透明填色 + 背景模糊（如 CSS `backdrop-filter`，或 Android 12+ 窗口背景模糊能力；AOSP 文档也给出磨砂玻璃类半径的经验区间，见 [Window blurs](https://source.android.com/docs/core/display/window-blurs)）。两者都不是「更高级的半透明」，而是两种不同的**信息分层策略**。
 
@@ -49,9 +49,9 @@ heroImage:
 | 设计隐喻 | 真玻璃 + 流体（偏物理光学与系统一致性） | 磨砂玻璃板（偏装饰性材质与品牌氛围） |
 | 典型出处倾向 | 系统级设计语言（如 Apple Liquid Glass） | 跨平台流行视觉语言（Glassmorphism）与 App 自定义顶栏/弹层 |
 
-![液态玻璃与毛玻璃对照](./compare-frosted-vs-liquid.png)
+![毛玻璃谱系（Aero）与液态玻璃（Apple）对照](./compare-frosted-vs-liquid.jpg)
 
-*配图说明：同一背景上的两张设置面板——左为毛玻璃静态可读，右为液态玻璃动态光学；菜单结构一致，差异只在材质。*
+*左：Windows Aero / Mobility Center（[Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Windows_Vista_mobility_center.png)）；右：Apple Newsroom 公布的 Liquid Glass 桌面界面。*
 
 一句话区分：**毛玻璃是在「糊」背景以换可读；液态玻璃是在「活」的光学层上做导航，并声明内容优先。**
 
@@ -75,9 +75,9 @@ Apple 公开表述里，Liquid Glass 会随情境变化，帮助把注意力带�
 
 通透、轻盈、偏「高级感」与「空间感」。对品牌展示、媒体浏览、创意工具，玻璃材质能传递「现代、精致」。这是真实收益，但**情绪价值不能替代可读性与可操作性**。
 
-![层次与焦点：玻璃层如何抬升控件](./ux-hierarchy.png)
+![Icon Composer 与分层图标（Apple）](./ux-hierarchy.jpg)
 
-*配图说明：示意图：底层内容列表 → 中层毛玻璃/液态玻璃导航 → 顶层可点控件；箭头标出「用户第一眼」应落在内容还是控件，并标注错误用法（整页铺玻璃导致焦点涣散）。*
+*来源：Apple Newsroom 配图 *Icon Composer* — 展示玻璃材质如何作用在控件/图标层而非正文层。*
 
 ---
 
@@ -103,9 +103,9 @@ Apple 公开表述里，Liquid Glass 会随情境变化，帮助把注意力带�
 
 到处都是玻璃时：边界消失、主次消失、可点区域变难找。炫变成噪音，品牌感变成廉价滤镜。
 
-![可读性风险：同一玻璃面板滚过明暗背景](./readability-risk.png)
+![Liquid Glass 明暗自适应：Clear look vs Dark tint](./readability-risk.jpg)
 
-*配图说明：同一半透明面板分别叠在深色区与浅色区：深色区文字清晰，浅色区对比崩坏；旁注「对比度是移动靶」与「需 scrim / 提高不透明度 / 实色回退」。*
+*来源：Apple Newsroom — Home Screen *clear look* 与 *dark tint* 对照，说明材质会随环境变化，可读性需系统/产品共同守住。*
 
 ---
 
@@ -149,9 +149,9 @@ Apple 公开表述里，Liquid Glass 会随情境变化，帮助把注意力带�
 - 背景不可控（用户相册、UGC、复杂可视化）；
 - 任何时刻对比度必须可预测（截图、客服、合规审计）。
 
-![何时用哪种材质](./when-to-use.png)
+![网上可核对的三种材质样本](./when-to-use.jpg)
 
-*配图说明：三列决策树——「系统一致性 / 控件层」→ 液态玻璃；「浮层可读 / 跨平台」→ 毛玻璃；「正文与数据 / 对比必须稳」→ 实色或高不透明；底部一行反例：全屏玻璃仪表盘。*
+*从左到右：历史毛玻璃（Aero，Wikimedia）→ 系统液态玻璃（Apple Newsroom）→ 开源液态实现演示（[Kyant0/AndroidLiquidGlass](https://github.com/Kyant0/AndroidLiquidGlass) Catalog）。*
 
 ---
 
@@ -189,7 +189,7 @@ Apple 公开表述里，Liquid Glass 会随情境变化，帮助把注意力带�
 2. **酷安等产品**：酷安 Android **v16.6.1** 公开更新说明中确有「全新液态玻璃设计风格」及材质选择（液态玻璃 / 背景模糊 / 半透明），并向 AndroidLiquidGlass 致谢；本文仍以设计体验为主，未展开其工程实现。毛玻璃一侧更多参照通用 Glassmorphism 与 AOSP 窗口模糊实践。
 3. **无障碍行为**：Reduce Transparency / Reduce Motion 对 Liquid Glass 的影响，综合了公开辅助功能说明与社区实测倾向；**不同系统小版本表现可能不一致**，上线前应用真机矩阵复核。
 4. **未引用定量用户研究**：文中不出现未核实的完成率、满意度百分比或「X% 用户更喜欢」类数据。
-5. **插图**：文中五处配图已嵌入（含示意合成图与公开素材）；图注中的「示意」表示非某一正式产品截帧。
+5. **插图**：文中配图改为网络公开实图（Apple Newsroom、Wikimedia Commons、Kyant0 开源仓库），拼图仅作并排对照，不新增虚构界面。
 6. **语气**：按设计文档而非营销稿；若博客需要更强观点或更轻口语，可再调一版。
 
 ---
@@ -208,9 +208,9 @@ Users rarely say “refraction” or “Gaussian blur.” They notice three thin
 
 Liquid Glass and frosted glass (often filed under Glassmorphism) both sell translucency plus depth — differently. Liquid Glass emphasizes **motion, environmental response, refraction and fluidity**. Frosted glass emphasizes **blurring what is behind so the surface stays readable**.
 
-![User perception: clarity, hierarchy, and attention](./hero.png)
+![Apple Liquid Glass across devices](./hero.jpg)
 
-*Image note: Left — opaque chrome blocking content; middle — frosted glass stabilizing type by blurring the background; right — Liquid Glass keeping background readable with living edge highlights. Perception first, implementation last.*
+*Source: [Apple Newsroom](https://www.apple.com/newsroom/2025/06/apple-introduces-a-delightful-and-elegant-new-software-design/).*
 
 Publicly, Apple described Liquid Glass at WWDC 2025 as a translucent material that reflects and refracts its surroundings and dynamically transforms to help focus content, spanning controls, navigation, icons, widgets, and multiple OS surfaces ([Apple Newsroom](https://www.apple.com/newsroom/2025/06/apple-introduces-a-delightful-and-elegant-new-software-design/); [Adopting Liquid Glass](https://developer.apple.com/documentation/TechnologyOverviews/adopting-liquid-glass)). Frosted treatments are common in Web/Android custom surfaces: translucent fill + backdrop blur (e.g. CSS `backdrop-filter`, or Android 12+ window background blur; AOSP even discusses radius ranges for frosted-like results — [Window blurs](https://source.android.com/docs/core/display/window-blurs)). Neither is merely “fancier transparency.” They are different **information-layering strategies**.
 
@@ -227,9 +227,9 @@ Publicly, Apple described Liquid Glass at WWDC 2025 as a translucent material th
 | Design metaphor | Real glass + fluid optics (system coherence) | Sandblasted glass pane (brand atmosphere) |
 | Typical locus | System design language (e.g. Apple Liquid Glass) | Cross-platform visual trend and custom app bars/sheets |
 
-![Liquid Glass vs frosted glass](./compare-frosted-vs-liquid.png)
+![Historical Aero frosted glass vs Apple Liquid Glass](./compare-frosted-vs-liquid.jpg)
 
-*Image note: Same busy wallpaper; left card frosted (stable type, detail crushed); right card Liquid Glass (more background detail, stronger living highlights). Caption “static readability” vs “dynamic presence.”*
+*Left: Windows Aero / Mobility Center ([Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Windows_Vista_mobility_center.png)). Right: Apple Newsroom Liquid Glass desktop UI.*
 
 One-line distinction: **Frosted glass trades background detail for readable panels; Liquid Glass builds a living optical layer for controls and claims content priority.**
 
@@ -253,9 +253,9 @@ When the OS adopts one glass language system-wide, matching it reduces learning 
 
 Lightness, modernity, “premium” spatial feel — real for media, brand, and creative tools. Emotional value does **not** replace legibility or operability.
 
-![Hierarchy: how a glass layer lifts controls](./ux-hierarchy.png)
+![Apple Icon Composer layered glass icons](./ux-hierarchy.jpg)
 
-*Image note: Content list → glass navigation → controls; arrows for first glance; call out the anti-pattern of glass everywhere dissolving hierarchy.*
+*Source: Apple Newsroom — Icon Composer, glass on the control/icon layer.*
 
 ---
 
@@ -281,9 +281,9 @@ Realtime blur/refraction is GPU-heavy. Users may not name the cause; they feel s
 
 When everything is glass, edges, priority, and affordances dissolve. Spectacle becomes noise.
 
-![Readability risk across light and dark regions](./readability-risk.png)
+![Clear look vs dark tint](./readability-risk.jpg)
 
-*Image note: Same translucent panel over dark vs light areas; annotate moving-target contrast and mitigations (scrim, higher opacity, solid fallback).*
+*Source: Apple Newsroom Home Screen clear look vs dark tint — material adapts; contrast remains a product responsibility.*
 
 ---
 
@@ -327,9 +327,9 @@ When everything is glass, edges, priority, and affordances dissolve. Spectacle b
 - Backgrounds are uncontrolled (photos, UGC, dense viz);
 - Contrast must be predictable for screenshots, support, or compliance.
 
-![When to use which material](./when-to-use.png)
+![Three real-world samples from the web](./when-to-use.jpg)
 
-*Image note: Three-column decision — system/control layer → Liquid Glass; readable floating panel → frost; body/data → solid; footer anti-pattern: full-screen glass dashboard.*
+*Left to right: Aero frosted (Wikimedia) → Apple Liquid Glass (Newsroom) → Kyant0 AndroidLiquidGlass catalog (open source).*
 
 ---
 
@@ -365,7 +365,7 @@ Hard review question: **If glass is removed (or Reduce Transparency is on), does
 2. **Coolapk / similar apps** — Coolapk Android **v16.6.1** publicly noted a liquid-glass design language and material choices (liquid glass / backdrop blur / translucent), crediting AndroidLiquidGlass. This essay stays on UX; frosted patterns still lean on general Glassmorphism and AOSP window-blur practice.
 3. **A11y behavior** — Effects of Reduce Transparency / Reduce Motion on Liquid Glass follow public accessibility write-ups and community reports; **OS point releases may differ** — verify on device matrices.
 4. **No invented metrics** — No unverified completion rates or preference percentages.
-5. **Figures** — Five figures are embedded (schematics + public assets); captions marked “schematic” are not a single product screenshot.
+5. **Figures** — Replaced with public web images (Apple Newsroom, Wikimedia Commons, Kyant0). Side-by-side plates are layout only, not invented UI.
 6. **Tone** — Written as a design note, not marketing; can be loosened for a more conversational blog voice.
 
 </div>
