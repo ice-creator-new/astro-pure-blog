@@ -58,7 +58,14 @@ export const PUT: APIRoute = async ({ request, params }) => {
             .map((s) => s.trim())
             .filter(Boolean),
       language: body.language ? String(body.language) : '中 / EN',
-      draft: Boolean(body.draft)
+      draft: Boolean(body.draft),
+      heroImage: body.heroImage?.src
+        ? {
+            src: String(body.heroImage.src),
+            alt: body.heroImage.alt ? String(body.heroImage.alt) : undefined,
+            color: body.heroImage.color ? String(body.heroImage.color) : undefined
+          }
+        : undefined
     }
     if (meta.description.length < 10) meta.description = meta.description + '………'
     const md = buildMarkdown(meta, String(body.body || ''))

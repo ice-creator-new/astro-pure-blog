@@ -8,6 +8,7 @@ export type PostMeta = {
   tags: string[]
   language?: string
   draft?: boolean
+  heroImage?: { src: string; alt?: string; color?: string }
 }
 
 export function slugify(input: string): string {
@@ -44,6 +45,12 @@ export function buildMarkdown(meta: PostMeta, body: string): string {
   }
   if (meta.language) lines.push(`language: ${yamlEscape(meta.language)}`)
   lines.push(`draft: ${meta.draft ? 'true' : 'false'}`)
+  if (meta.heroImage?.src) {
+    lines.push('heroImage:')
+    lines.push(`  src: ${yamlEscape(meta.heroImage.src)}`)
+    if (meta.heroImage.alt) lines.push(`  alt: ${yamlEscape(meta.heroImage.alt)}`)
+    if (meta.heroImage.color) lines.push(`  color: ${yamlEscape(meta.heroImage.color)}`)
+  }
   lines.push('---')
   lines.push('')
   lines.push(body.replace(/^\uFEFF/, '').replace(/^\n+/, ''))
