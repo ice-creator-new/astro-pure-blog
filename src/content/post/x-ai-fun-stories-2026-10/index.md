@@ -3,7 +3,7 @@ title: "X 上这一周的 AI 趣事：游戏焊合、域名整活与星海作弊
 titleEn: "AI Oddities from X: Game Mashups, Domain Trolls & StarCraft Cheats"
 publishDate: 2026-10-09 11:40:00
 description: "近两周 X 上可核验的 AI 荒诞样板：游戏合流、Dots/dot.com、Astra 星海作弊、Altman×Amodei 音乐宇宙、SNL、承诺书拼写、假《纽约客》签名、试衣染发、阿弗莱克讲 tensor；附录 Coxon 辞职模板。"
-descriptionEn: "Two weeks of verifiable AI absurdity on X: game mashups, Dots vs dot.com, Astra cheating at StarCraft, the Altman×Amodei cinematic universe, SNL, a misspelled pledge, forged New Yorker signatures, try-on dye jobs, and Ben Affleck on tensors—plus a Coxon resignation-template appendix."
+descriptionEn: "Two weeks of AI absurdity on X—game mashups, Dots vs Grok, Astra StarCraft cheats, Altman×Amodei videos, SNL, forged New Yorker signatures, and more."
 tags:
   - AI
   - X
