@@ -15,7 +15,7 @@
     "yijiansanlian": "bun lint && bun check && bun format"
   },
   "engines": {
-    "node": "20.x"
+    "node": "24.x"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.4",
