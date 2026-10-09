@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "astro dev",
     "dev:check": "astro check --watch & astro dev",
-    "build": "astro check && astro build",
+    "build": "astro check && astro build && node scripts/fix-vercel-node-runtime.mjs",
     "preview": "astro preview",
     "astro": "astro",
     "new-post": "node scripts/new-post.js",
